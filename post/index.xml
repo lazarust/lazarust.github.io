@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Dataquest Certifications</title>
+      <link>https://lazarust.github.io/post/dataquest/</link>
+      <pubDate>Mon, 13 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://lazarust.github.io/post/dataquest/</guid>
+      <description>Over the past two months I started working on expanding my knowledge and experience by finishing the Data Scientist in Python Path on Dataquest. The funny part of this was, that while working on this I was able to inadvertently also get the Data Analyst in Python Path certificate. While working on the certificate I learned a lot and got a lot of useful refresh on some basic skills. This post will just be some of the thoughts I had while working on some of the courses within these paths.</description>
+    </item>
+    
+    <item>
       <title>Pokémon Statistical Analysis</title>
       <link>https://lazarust.github.io/post/poke_stats/</link>
       <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
