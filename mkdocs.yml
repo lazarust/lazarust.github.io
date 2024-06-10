@@ -1,6 +1,7 @@
+site_description: Personal tech blog
 site_name: Thomas Lazarus
+site_url: lazarust.github.io
 
-site_dir: .
 docs_dir: ./site/
 
 theme:
