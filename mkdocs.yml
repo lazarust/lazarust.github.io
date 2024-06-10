@@ -1,6 +1,6 @@
 site_name: Thomas Lazarus
 
-docs_dir: ./blog/
+docs_dir: ./site/
 
 
 theme:
@@ -20,3 +20,11 @@ theme:
 plugins:
   - search
   - blog
+  - rss:
+      match_path: blog/posts/.*
+      date_from_meta:
+        as_creation: date
+      categories:
+        - categories
+        - tags
+      enabled: true
