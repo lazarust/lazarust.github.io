@@ -3,6 +3,7 @@ site_name: Thomas Lazarus
 site_url: http://lazarust.github.io
 
 docs_dir: ./site/blog
+site_dir: page
 
 theme:
   name: material
