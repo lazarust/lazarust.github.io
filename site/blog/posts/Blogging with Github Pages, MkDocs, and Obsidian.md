@@ -6,13 +6,17 @@ categories:
   - obsidian
   - mkdocs
 ---
+# Setting up Obsidian
+The easiest way to use Obsidian with Git is to just have your vault be the Git repository. There are ways you can make a subdirectory in a vault it's own Git repo (either via Git submodules or just putting the Git repo in the subdirectory), but that can make things way more complicated so I can cover that in a separate post if there's interest. 
+
+
 
 # Setting up MkDocs
 MkDocs uses the `mkdocs.yml` configuration file in the root of the repository.
 
 ```yml
-site_description: Personal tech blog
-site_name: Thomas Lazarus
+site_description: Thomas Lazarus's Blog
+site_name: Thomas Lazarus's Blog
 site_url: http://lazarust.github.io
 
 docs_dir: ./site/blog
@@ -57,7 +61,7 @@ As you can see there is quite a lot of references to directories in the configur
 └── mkdocs.yml
 ```
 
-Initially I had 
+Initially I had named the `site` directory `blog` but that would make the path to posts `blog/blog/posts` 🤮. The general directory structure is decided by the built-in blog plugin inside of [MkDocs material](https://squidfunk.github.io/mkdocs-material/plugins/blog/).
 
 # The Github Action
 
