@@ -110,7 +110,7 @@ jobs:
         with:
           key: ${{ github.ref }}
           path: .cache
-      - run: pip install mkdocs-material mkdocstrings-python mkdocs-rss-plugin
+      - run: pip install mkdocs-material mkdocs-rss-plugin
       - run: mkdocs gh-deploy --force
 ```
 
