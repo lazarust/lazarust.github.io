@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 date: 2024-05-15
 categories:
   - blogging
@@ -15,12 +15,12 @@ I figured this would be a good first blog post since it's something other's coul
 
 <!-- more -->
 
-# Setting up the Github Repository
+## Setting up the Github Repository
 This is pretty trivial, on Github there are a couple "special" repositories you can make. One of them being `{github_username}.github.io`. When you create a repository with that name it's associated Github page will be just at that url. This differs from other repositories, where their Github pages get put at `{github_username}.github.io/{repository_name}`. 
 
 Once you have the repository created we can start setting up Obsidian. 
 
-# Setting up Obsidian
+## Setting up Obsidian
 The easiest way to use Obsidian with Git is to just have your vault be the Git repository. There are ways you can make a subdirectory in a vault it's own Git repo (either via Git submodules or just putting the Git repo in the subdirectory), but that can make things way more complicated so I can cover that in a separate post if there's interest. 
 
 To setup Obsidian Git I recommend following their [Getting Started](https://publish.obsidian.md/git-doc/Getting+Started) instruction page. Since we already created the repository on Github, you'll want to follow the [Starting with existing remote repository](https://publish.obsidian.md/git-doc/Getting+Started#Start+with+existing+remote+repository) instructions. 
@@ -31,7 +31,7 @@ Vault Back Interval - this can be helpful to automatically push changes at a giv
 
 Once you get that setup it's time to start setting up MkDocs!
 
-# Setting up MkDocs
+## Setting up MkDocs
 First you're going to want to make sure to [install MkDocs](https://www.mkdocs.org/user-guide/installation/). I'd recommend creating a virtual python environment so it doesn't get install globally on your system. 
 
 MkDocs uses the `mkdocs.yml` configuration file in the root of the repository.
@@ -87,7 +87,7 @@ Initially I had named the `site` directory `blog` but that would make the path t
 
 At this point you should be able to run `mkdocs serve` locally to see what your blog site will look like when deployed. Try putting a markdown file in the `/posts/` directory and see if it shows up! 
 
-# Setting up the Github Action
+## Setting up the Github Action
 Now that we have Obsidian automatically pushing changes and MkDocs configured the way we want. It's time to automatically publish the site. This is pretty simple via a Github action. 
 
 ```yml
