@@ -7,6 +7,9 @@ site_dir: page
 
 theme:
   name: material
+  features:
+    - navigation.path
+    - toc.follow
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
