@@ -1,5 +1,5 @@
-site_description: Personal tech blog
-site_name: Thomas Lazarus
+site_description: Thomas Lazarus' Blog
+site_name: Thomas Lazarus' Blog
 site_url: http://lazarust.github.io
 
 docs_dir: ./site/blog
@@ -31,3 +31,7 @@ plugins:
         - categories
         - tags
       enabled: true
+
+markdown_extensions:
+  - toc:
+      permalink: true
