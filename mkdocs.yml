@@ -1,5 +1,5 @@
-site_description: Thomas Lazarus' Blog
-site_name: Thomas Lazarus' Blog
+site_description: Thomas' Blog
+site_name: Thomas' Blog
 site_url: http://lazarust.github.io
 
 docs_dir: ./site/blog
