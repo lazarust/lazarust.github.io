@@ -1,6 +1,6 @@
 ---
-draft: true
-date: 2024-05-15
+draft: false
+date: 2024-05-17
 categories:
   - blogging
   - obsidian
@@ -125,4 +125,4 @@ The Github action to automatically deploy blog posts is pretty simple and really
 Now it's time to get blogging! One thing I really like about this setup is that it takes very little thought to create a post and publish it. It's as easy as opening Obsidian, typing some thoughts in markdown, and having Obsidian Git automatically (or manually) push the changes to Github. 
 
 
-Thanks for reading! I'm planning on blogging (or probably more micro-blogging) new things I learn and tips and tricks I find. [Shoutout Simon Willison](https://x.com/simonw/) for inspiring me to do this with his [webblog](https://simonwillison.net/)
+Thanks for reading! I'm planning on blogging (or probably more micro-blogging) new things I learn and tips and tricks I find. Shoutout [Simon Willison](https://x.com/simonw/) for inspiring me to do this with his [webblog](https://simonwillison.net/)I definitely recommend checking it out if you haven't heard of him.
