@@ -37,8 +37,8 @@ First you're going to want to make sure to [install MkDocs](https://www.mkdocs.o
 MkDocs uses the `mkdocs.yml` configuration file in the root of the repository.
 
 ```yml
-site_description: Thomas Lazarus's Blog
-site_name: Thomas Lazarus's Blog
+site_description: Thomas' Blog
+site_name: Thomas' Blog
 site_url: http://lazarust.github.io
 
 docs_dir: ./site/blog
