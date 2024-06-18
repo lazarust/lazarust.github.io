@@ -38,3 +38,15 @@ plugins:
 markdown_extensions:
   - toc:
       permalink: true
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lazarust
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/lazarustda
+    - icon: fontawesome/brands/linkedin
+      link: www.linkedin.com/in/td-lazarus
+    - icon: fontawesome/solid/rss
+      link: https://lazarust.github.io/feed_rss_created.xml
