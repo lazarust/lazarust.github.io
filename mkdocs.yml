@@ -7,6 +7,8 @@ site_dir: page
 
 theme:
   name: material
+  logo: assets/fa-trash-can.svg
+  favicon: assets/fa-trash-can.svg
   features:
     - navigation.path
     - toc.follow
