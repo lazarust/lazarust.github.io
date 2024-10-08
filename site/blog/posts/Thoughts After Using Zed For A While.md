@@ -34,11 +34,11 @@ and connection to Vim motion commands have made it an ideal choice for my needs.
 
 As a TLDR:
 Pros:
-- Ridiculously fast
-- Open source
-- Native Vim motions
-- Easy LLM model customization
+* Ridiculously fast
+* Open source
+* Native Vim motions
+* Easy LLM model customization
 
 Cons:
-- Lack of Pytest Support (though this is being worked on)
-- Lack of Docker container support as the remote development environment
+* Lack of Pytest Support (though this is being worked on)
+* Lack of Docker container support as the remote development environment
