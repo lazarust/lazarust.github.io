@@ -1,9 +1,8 @@
 ---
 draft: true
-date: 2024-10-07
+date: 2024-10-08
 categories:
   - zed
-  - ide
   - ollama
 ---
 # Thoughts After Using Zed.dev For A While
@@ -20,9 +19,26 @@ VSCode's Vim extensions, I found that PyCharm's native keyboard shortcuts clashe
 experienced with Zed. This made it an attractive choice for me.
 
 Finally, the ability to easily switch between LLMs is probably my favorite feature in Zed. As someone who likes to stay
-up-to-date on the latest Large Language Models (LLMs), having this flexibility has been invaluable – I can try out new
-models directly in Zed and see if they're worth switching to.
+up-to-date on the latest LLM, having this flexibility has been invaluable – I can try out new models directly in Zed and see if they're worth switching to. Personally, I use [Ollama](https://ollama.com/) to easily download and run models locally.
 
 ## Parts of Zed I don't like
-
 The main bone I have to pick with Zed is the lack of Pytest support. I use Pytest in most if not all of the project I contribute too. The good news is, is that it looks like there's a Github [issue](https://github.com/zed-industries/zed/issues/12080) and [pull request](https://github.com/zed-industries/zed/pull/18824) to add Pytest support! So this is a really small bone that will hopefully be taken care of soon. 
+
+The only other issue I've had with Zed is being able to use a Docker container as the remote development environment. Sometimes I prefer to use Docker to manage different things around my projects and I typically like to use Docker when deploying apps in production. 
+
+## Conclusion (Pros vs Cons)
+
+After spending some time using Zed, I must say that it has been a
+resounding success for me. Its lightweight design, customization options,
+and connection to Vim motion commands have made it an ideal choice for my needs.
+
+As a TLDR:
+Pros:
+- Ridiculously fast
+- Open source
+- Native Vim motions
+- Easy LLM model customization
+
+Cons:
+- Lack of Pytest Support (though this is being worked on)
+- Lack of Docker container support as the remote development environment
