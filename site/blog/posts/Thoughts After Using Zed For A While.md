@@ -7,7 +7,8 @@ categories:
 ---
 # Thoughts After Using Zed For A While
 
-For those who haven't heard of [Zed](Zed.dev): Zed is a lightweight code editor that, from their homepage, "designed for high-performance collaboration with humans and AI". I originally heard about Zed via [ThePrimeagen's](https://www.youtube.com/@ThePrimeagen) interview with Thorsten Ball, who is a engineer working for and on Zed. [Link to the interview](https://www.youtube.com/watch?v=8XweSqTYdMQ). 
+For those who haven't heard of [Zed](https://www.Zed.dev): Zed is a lightweight code editor that, from their homepage, "designed for high-performance collaboration with humans and AI". I originally heard about Zed via [ThePrimeagen's](https://www.youtube.com/@ThePrimeagen) interview with Thorsten Ball, who is a engineer working for and on Zed. [Link to the interview](https://www.youtube.com/watch?v=8XweSqTYdMQ). 
+
 
 ## What drew me to Zed
 Some things that originally pulled me towards Zed was how ridiculously fast it is. I generally used to mainly use PyCharm for most if not all of my programming. PyCharm is very feature rich, but in all honesty how often do I use 99% of those features... almost never. Zed really gives me the most barebones experience (without having to switch to NeoVim) and lets me customize anything I could want. 
