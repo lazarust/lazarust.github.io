@@ -36,6 +36,7 @@ plugins:
         - categories
         - tags
       enabled: true
+  - social
 
 markdown_extensions:
   - toc:
