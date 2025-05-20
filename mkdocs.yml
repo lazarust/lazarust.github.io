@@ -47,8 +47,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/lazarust
-    - icon: fontawesome/brands/x-twitter
-      link: https://x.com/lazarustda
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/lazarust.bsky.social
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/td-lazarus
     - icon: fontawesome/solid/rss
