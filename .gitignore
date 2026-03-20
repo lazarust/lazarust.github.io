@@ -1,2 +1,6 @@
 site/blog/.DS_Store
 site/.DS_Store
+
+.cache
+page
+
