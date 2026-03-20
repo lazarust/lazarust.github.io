@@ -2,6 +2,11 @@ site_description: Thomas' Blog
 site_name: Thomas' Blog
 site_url: http://lazarust.github.io
 
+nav:
+  - Posts:
+    - index.md
+  - About Me: about.md
+
 docs_dir: ./site/blog
 site_dir: page
 
@@ -9,17 +14,28 @@ theme:
   name: material
   logo: assets/fa-trash-can.svg
   favicon: assets/fa-trash-can.svg
+  font:
+    text: Inter
+    code: Roboto Mono
   features:
+    - navigation.tabs
     - navigation.path
+    - navigation.instant
+    - navigation.top
+    - navigation.tracking
     - toc.follow
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: blue grey
+      accent: cyan
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: grey
+      accent: cyan
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
@@ -41,6 +57,9 @@ plugins:
 markdown_extensions:
   - toc:
       permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
   generator: false
@@ -49,6 +68,8 @@ extra:
       link: https://github.com/lazarust
     - icon: fontawesome/brands/bluesky
       link: https://bsky.app/profile/lazarust.bsky.social
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/lazarustda
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/td-lazarus
     - icon: fontawesome/solid/rss
