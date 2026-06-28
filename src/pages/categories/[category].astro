@@ -1,18 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  const categories = [...new Set(posts.flatMap(p => p.data.categories ?? []))];
+  const allPosts = await getCollection('posts');
+  const published = allPosts.filter((p: CollectionEntry<'posts'>) => !p.data.draft);
+  const categories = [...new Set(published.flatMap((p: CollectionEntry<'posts'>) => p.data.categories ?? []))];
   return categories.map(cat => ({
     params: { category: cat },
-    props: { category: cat, posts: posts.filter(p => p.data.categories?.includes(cat)) },
+    props: { category: cat, posts: published.filter((p: CollectionEntry<'posts'>) => p.data.categories?.includes(cat)) },
   }));
 }
 
 const { category, posts } = Astro.props;
-const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sorted = posts.sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout title={`Category: ${category}`}>
@@ -23,7 +24,7 @@ const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf(
     <span class="prompt-cmd">ls {category}/</span>
   </div>
   <div class="ls-listing">
-    {sorted.map(post => (
+    {sorted.map((post: CollectionEntry<'posts'>) => (
       <div class="ls-row">
         <span class="ls-date">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}</span>
         <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>{post.data.title}</a>

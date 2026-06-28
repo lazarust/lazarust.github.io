@@ -63,6 +63,8 @@
 
   function handleKeydown(e) {
     if (searchMode) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -90,7 +92,7 @@
         return;
       }
 
-      if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (e.key.length === 1) {
         searchQuery += e.key;
         searchIndex = 0;
       }
@@ -126,6 +128,11 @@
       e.preventDefault();
       enterSearch('posts');
       return;
+    }
+
+    if (tPressed) {
+      tPressed = false;
+      clearTimeout(tTimer);
     }
   }
 

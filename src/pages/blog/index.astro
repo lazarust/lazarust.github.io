@@ -1,14 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogFilter from '../../components/BlogFilter.svelte';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 const posts = await getCollection('posts');
 const sorted = posts
-  .filter(p => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .filter((p: CollectionEntry<'posts'>) => !p.data.draft)
+  .sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const postData = sorted.map(p => ({
+const postData = sorted.map((p: CollectionEntry<'posts'>) => ({
   slug: p.slug,
   data: {
     title: p.data.title,

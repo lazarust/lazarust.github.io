@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 const pages = await getCollection('pages');
-const about = pages.find(p => p.slug === 'about');
+const about = pages.find((p: CollectionEntry<'pages'>) => p.slug === 'about');
 const { Content } = await about.render();
 ---
 
