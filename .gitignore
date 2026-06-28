@@ -1,6 +1,8 @@
+/dist/
+/node_modules/
+.astro/
 site/blog/.DS_Store
 site/.DS_Store
-
+.venv
 .cache
 page
-
