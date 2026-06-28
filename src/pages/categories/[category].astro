@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
+import { getPublishedPosts } from '../../lib/posts';
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts');
-  const published = allPosts.filter((p: CollectionEntry<'posts'>) => !p.data.draft);
+  const published = await getPublishedPosts();
   const categories = [...new Set(published.flatMap((p: CollectionEntry<'posts'>) => p.data.categories ?? []))];
   return categories.map(cat => ({
     params: { category: cat },

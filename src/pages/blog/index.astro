@@ -1,21 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogFilter from '../../components/BlogFilter.svelte';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getPublishedPosts, serializePost } from '../../lib/posts';
 
-const posts = await getCollection('posts');
-const sorted = posts
-  .filter((p: CollectionEntry<'posts'>) => !p.data.draft)
-  .sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const postData = sorted.map((p: CollectionEntry<'posts'>) => ({
-  slug: p.slug,
-  data: {
-    title: p.data.title,
-    date: p.data.date.toISOString(),
-    categories: p.data.categories ?? [],
-  },
-}));
+const posts = await getPublishedPosts();
+const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const postData = sorted.map(serializePost);
 ---
 
 <BaseLayout title="~/blog">
