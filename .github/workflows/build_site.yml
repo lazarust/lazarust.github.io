@@ -1,4 +1,4 @@
-name: build_docs
+name: build_site
 on:
   push:
     branches:
@@ -10,9 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          enable-cache: true
-          cache-dependency-glob: "uv.lock"
-      - run: uv run mkdocs gh-deploy --force
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
