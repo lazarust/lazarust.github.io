@@ -1,14 +1,13 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../lib/posts';
 
 export async function GET(context) {
-  const posts = await getCollection('posts');
-  const published = posts.filter(p => !p.data.draft);
+  const posts = await getPublishedPosts();
   return rss({
     title: "Thomas' Blog",
     description: 'Personal blog about data engineering, ML, and tools',
     site: context.site,
-    items: published.map(post => ({
+    items: posts.map(post => ({
       title: post.data.title,
       pubDate: post.data.date,
       link: `/posts/${post.slug}/`,

@@ -53,10 +53,10 @@
       return;
     }
 
-    if (e.key === 'g') { e.preventDefault(); window.open('https://github.com/lazarust', '_blank'); return; }
-    if (e.key === 'b') { e.preventDefault(); window.open('https://bsky.app/profile/lazarust.bsky.social', '_blank'); return; }
-    if (e.key === 'x') { e.preventDefault(); window.open('https://twitter.com/lazarustda', '_blank'); return; }
-    if (e.key === 'l') { e.preventDefault(); window.open('https://www.linkedin.com/in/td-lazarus', '_blank'); return; }
+    if (e.key === 'g') { e.preventDefault(); window.open('https://github.com/lazarust', '_blank', 'noopener,noreferrer'); return; }
+    if (e.key === 'b') { e.preventDefault(); window.open('https://bsky.app/profile/lazarust.bsky.social', '_blank', 'noopener,noreferrer'); return; }
+    if (e.key === 'x') { e.preventDefault(); window.open('https://twitter.com/lazarustda', '_blank', 'noopener,noreferrer'); return; }
+    if (e.key === 'l') { e.preventDefault(); window.open('https://www.linkedin.com/in/td-lazarus', '_blank', 'noopener,noreferrer'); return; }
     if (e.key === 'r') { e.preventDefault(); window.location.href = '/rss.xml'; return; }
 
     if (e.key === '?') {
