@@ -1,0 +1,47 @@
+---
+import '../styles/tokyonight.css';
+import KeyboardNav from '../components/KeyboardNav.svelte';
+
+export interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{siteTitle}</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Thomas' Blog" href="/rss.xml" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content="Personal blog about data engineering, ML, and tools" />
+    <meta property="og:image" content="https://lazarust.github.io/og-image.png" />
+    <meta property="og:url" content={Astro.url} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="astro-view-transitions" content="enable" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="editor-pane">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <div class="footer-links">
+          <a href="https://github.com/lazarust" target="_blank" rel="noopener">github</a>
+          <a href="https://bsky.app/profile/lazarust.bsky.social" target="_blank" rel="noopener">bluesky</a>
+          <a href="https://twitter.com/lazarustda" target="_blank" rel="noopener">x</a>
+          <a href="https://www.linkedin.com/in/td-lazarus" target="_blank" rel="noopener">linkedin</a>
+          <a href="/rss.xml" target="_blank" rel="noopener">rss</a>
+        </div>
+        <p class="footer-hint">press <kbd>?</kbd> for keyboard shortcuts</p>
+      </footer>
+      <KeyboardNav client:load />
+    </div>
+  </body>
+</html>
