@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const pages = await getCollection('pages');
+const about = pages.find(p => p.slug === 'about');
+const { Content } = await about.render();
+---
+
+<BaseLayout title="About">
+  <nav class="nav-links"><a href="/" data-nav-item>&larr; home</a></nav>
+  <div class="prompt-line">
+    <span class="prompt-user">~</span>
+    <span class="prompt-sep">$</span>
+    <span class="prompt-cmd">cat about.md</span>
+  </div>
+  <article class="post-content">
+    <Content />
+  </article>
+</BaseLayout>
