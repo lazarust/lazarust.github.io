@@ -26,7 +26,8 @@ const sorted = posts.sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'post
   <div class="ls-listing">
     {sorted.map((post: CollectionEntry<'posts'>) => (
       <div class="ls-row">
-        <span class="ls-date">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })}</span>
+        <span class="ls-date">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
+          <span class="ls-time">, {post.data.date.getFullYear()}</span></span>
         <a href={`/posts/${post.id}/`} data-nav-item data-list-item>{post.data.title}</a>
       </div>
     ))}
