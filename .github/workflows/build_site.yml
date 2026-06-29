@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: npm
@@ -25,9 +25,9 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - if: github.event_name == 'push'
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - if: github.event_name == 'push'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
   deploy:
@@ -39,4 +39,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
