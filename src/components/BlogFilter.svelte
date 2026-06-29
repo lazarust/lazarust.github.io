@@ -142,9 +142,9 @@
   });
 
   function fmt(date) {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit'
-    }).format(new Date(date));
+    const d = new Date(date);
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+    return `${dateStr}<span class="ls-time">, ${d.getFullYear()}</span>`;
   }
 
   let cmd = $derived(activeTag ? `ls ${activeTag}/` : 'ls');
@@ -202,7 +202,7 @@
   {#if searchMode === 'posts'}
     {#each postSearchResults as post}
       <div class="ls-row">
-        <span class="ls-date">{fmt(post.data.date)}</span>
+        <span class="ls-date">{@html fmt(post.data.date)}</span>
         <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>
           {post.data.title}
         </a>
@@ -211,7 +211,7 @@
   {:else}
     {#each filtered as post}
       <div class="ls-row">
-        <span class="ls-date">{fmt(post.data.date)}</span>
+        <span class="ls-date">{@html fmt(post.data.date)}</span>
         <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>
           {post.data.title}
         </a>
