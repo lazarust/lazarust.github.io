@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { type CollectionEntry } from 'astro:content';
+import { render, type CollectionEntry } from 'astro:content';
 import { getPublishedPosts } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
   return posts.map((post: CollectionEntry<'posts'>) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props as unknown as { post: CollectionEntry<'posts'> };
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title}>
@@ -20,7 +20,7 @@ const { Content } = await post.render();
   <div class="prompt-line">
     <span class="prompt-user">~/blog</span>
     <span class="prompt-sep">$</span>
-    <span class="prompt-cmd">cat {post.slug}.md</span>
+    <span class="prompt-cmd">cat {post.id}.md</span>
   </div>
   <article class="post-content">
     <header class="post-header">

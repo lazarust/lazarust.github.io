@@ -1,13 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 const pages = await getCollection('pages');
-const about = pages.find((p: CollectionEntry<'pages'>) => p.slug === 'about');
+const about = pages.find((p: CollectionEntry<'pages'>) => p.id === 'about');
 if (!about) {
   throw new Error('about.md not found in src/content/pages/');
 }
-const { Content } = await about.render();
+const { Content } = await render(about);
 ---
 
 <BaseLayout title="About">

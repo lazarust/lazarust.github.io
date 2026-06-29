@@ -18,7 +18,7 @@ export async function getPublishedPosts(): Promise<CollectionEntry<'posts'>[]> {
 
 export function serializePost(post: CollectionEntry<'posts'>): PostMeta {
   return {
-    slug: post.slug,
+    slug: post.id,
     data: {
       title: post.data.title,
       description: post.data.description,
