@@ -9,7 +9,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.0",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.0.0",
     "@astrojs/svelte": "^9.0.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
