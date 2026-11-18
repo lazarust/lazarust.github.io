@@ -3,6 +3,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/600.css';
 import '@fontsource/jetbrains-mono/400-italic.css';
 import '../styles/tokyonight.css';
+import { ClientRouter } from 'astro:transitions';
 
 export interface Props {
   title?: string;
@@ -16,6 +17,19 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('tn-theme');
+          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          const theme = saved ?? (prefersLight ? 'day' : 'night');
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'night';
+        }
+      })();
+    </script>
+    <ClientRouter />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{siteTitle}</title>
     <link rel="icon" href="/favicon.svg" />
@@ -34,25 +48,22 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
       <main class="editor-pane" id="main-content" tabindex="-1">
         <slot />
       </main>
-      <footer class="site-footer">
+      <footer class="site-footer" transition:persist="site-footer">
         <nav class="footer-links" aria-label="Social links">
           <a href="https://github.com/lazarust" target="_blank" rel="noopener">
-            {' '}
-            github{' '}
+            github
           </a>
           <a href="https://bsky.app/profile/lazarust.bsky.social" target="_blank" rel="noopener">
             bluesky
           </a>
           <a href="https://twitter.com/lazarustda" target="_blank" rel="noopener">
-            {' '}
-            x{' '}
+            x
           </a>
           <a href="https://www.linkedin.com/in/td-lazarus" target="_blank" rel="noopener">
             linkedin
           </a>
           <a href="/rss.xml" target="_blank" rel="noopener">
-            {' '}
-            rss{' '}
+            rss
           </a>
         </nav>
         <p class="footer-hint">

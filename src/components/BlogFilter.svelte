@@ -136,8 +136,8 @@
 
 {#if filtered.length > 0}
   <div class="ls-listing">
-    {#each filtered as post (post.slug)}
-      <div class="ls-row" data-post-slug={post.slug}>
+    {#each filtered as post, index (post.slug)}
+      <div class="ls-row" data-post-slug={post.slug} style="--i: {Math.min(index, 12)}">
         <span class="ls-date">
           {formatPostDate(post.data.date, 'short')}<span class="ls-time">
             , {formatPostDate(post.data.date, 'year')}

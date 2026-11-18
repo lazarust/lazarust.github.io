@@ -21,6 +21,86 @@
   --border: var(--surface-1);
 }
 
+html[data-theme='night'] {
+  color-scheme: dark;
+  --bg: #1a1b26;
+  --bg-alt: #1f2132;
+  --surface-0: #24283b;
+  --surface-1: #2f3346;
+  --surface-2: #3b3f58;
+  --fg: #a9b1d6;
+  --fg-bright: #c0caf5;
+  --comment: #828bb8;
+  --blue: #7aa2f7;
+  --green: #9ece6a;
+  --red: #f7768e;
+  --yellow: #e0af68;
+  --purple: #bb9af7;
+  --cyan: #7dcfff;
+  --orange: #ff9e64;
+  --border: #2f3346;
+}
+
+html[data-theme='storm'] {
+  color-scheme: dark;
+  --bg: #24283b;
+  --bg-alt: #1f2335;
+  --surface-0: #2f3346;
+  --surface-1: #3b3f58;
+  --surface-2: #414868;
+  --fg: #a9b1d6;
+  --fg-bright: #c0caf5;
+  --comment: #8d96c5;
+  --blue: #7aa2f7;
+  --green: #9ece6a;
+  --red: #f7768e;
+  --yellow: #e0af68;
+  --purple: #bb9af7;
+  --cyan: #7dcfff;
+  --orange: #ff9e64;
+  --border: #3b3f58;
+}
+
+html[data-theme='moon'] {
+  color-scheme: dark;
+  --bg: #222436;
+  --bg-alt: #1e2030;
+  --surface-0: #2f334d;
+  --surface-1: #3b4261;
+  --surface-2: #444a73;
+  --fg: #a9b8e8;
+  --fg-bright: #c8d3f5;
+  --comment: #7a88cf;
+  --blue: #82aaff;
+  --green: #c3e88d;
+  --red: #ff757f;
+  --yellow: #ffc777;
+  --purple: #c099ff;
+  --cyan: #86e1fc;
+  --orange: #ff966c;
+  --border: #3b4261;
+}
+
+html[data-theme='day'] {
+  color-scheme: light;
+  --bg: #e1e2e7;
+  --bg-alt: #d0d5e3;
+  --surface-0: #d8dbe8;
+  --surface-1: #c4c8da;
+  --surface-2: #b7bcd0;
+  --fg: #3760bf;
+  --fg-bright: #2e3a6b;
+  --comment: #565f89;
+  --blue: #2e7de9;
+  --green: #587539;
+  --red: #f52a65;
+  --yellow: #8c6c3e;
+  --purple: #9854f1;
+  --cyan: #007197;
+  --orange: #b15c00;
+  --border: #c4c8da;
+}
+
 *,
 *::before,
 *::after {
@@ -166,6 +246,25 @@ kbd {
   align-items: baseline;
   padding: 0.15rem 0.5rem;
   border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ls-row {
+    animation: row-in 240ms ease-out both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+
+  @keyframes row-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 .ls-row a {

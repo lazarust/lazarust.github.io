@@ -1,5 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const entries = [
+  { href: '/about/', label: 'about.md' },
+  { href: '/blog/', label: 'blog' },
+];
 ---
 
 <BaseLayout title="~/">
@@ -21,19 +26,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <div class="ls-listing">
-    <div class="ls-row">
-      <span class="ls-date"></span>
-      <span class="ls-size">-</span>
-      <a href="/about/" data-nav-item>
-        about.md
-      </a>
-    </div>
-    <div class="ls-row">
-      <span class="ls-date"></span>
-      <span class="ls-size">-</span>
-      <a href="/blog/" data-nav-item>
-        blog
-      </a>
-    </div>
+    {entries.map((entry, index) => (
+      <div class="ls-row" style={`--i: ${Math.min(index, 12)}`}>
+        <span class="ls-date"></span>
+        <span class="ls-size">-</span>
+        <a href={entry.href} data-nav-item>
+          {entry.label}
+        </a>
+      </div>
+    ))}
   </div>
 </BaseLayout>

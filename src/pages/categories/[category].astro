@@ -30,8 +30,8 @@ const sorted = posts.sort(byDateDesc);
     <span class="prompt-cmd">ls {category}/</span>
   </div>
   <div class="ls-listing">
-    {sorted.map((post) => (
-      <div class="ls-row">
+    {sorted.map((post, index) => (
+      <div class="ls-row" style={`--i: ${Math.min(index, 12)}`}>
         <span class="ls-date">
           {formatPostDate(post.data.date, 'short')}
           <span class="ls-time">, {formatPostDate(post.data.date, 'year')}</span>

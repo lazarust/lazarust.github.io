@@ -24,6 +24,15 @@ export type CommandBlock = {
   commands: Command[];
 };
 
+export type ThemeName = 'night' | 'storm' | 'moon' | 'day';
+
+export function setTheme(name: ThemeName): void {
+  if (typeof document !== 'undefined') document.documentElement.dataset.theme = name;
+  try {
+    localStorage.setItem('tn-theme', name);
+  } catch {}
+}
+
 export const GROUP_ORDER: readonly CommandGroup[] = ['posts', 'tags', 'navigate', 'actions'];
 
 const NAVIGATION: readonly Command[] = [
@@ -62,7 +71,7 @@ const NAVIGATION: readonly Command[] = [
   },
 ];
 
-const SOCIAL: readonly Command[] = [
+const ACTIONS: readonly Command[] = [
   {
     id: 'social:github',
     label: 'GitHub',
@@ -94,6 +103,34 @@ const SOCIAL: readonly Command[] = [
     hint: 'td-lazarus',
     keywords: ['work', 'social'],
     href: 'https://www.linkedin.com/in/td-lazarus',
+  },
+  {
+    id: 'theme:night',
+    label: 'Theme: night',
+    group: 'actions',
+    keywords: ['theme', 'dark'],
+    run: () => setTheme('night'),
+  },
+  {
+    id: 'theme:storm',
+    label: 'Theme: storm',
+    group: 'actions',
+    keywords: ['theme', 'dark'],
+    run: () => setTheme('storm'),
+  },
+  {
+    id: 'theme:moon',
+    label: 'Theme: moon',
+    group: 'actions',
+    keywords: ['theme', 'dark'],
+    run: () => setTheme('moon'),
+  },
+  {
+    id: 'theme:day',
+    label: 'Theme: day',
+    group: 'actions',
+    keywords: ['theme', 'light'],
+    run: () => setTheme('day'),
   },
 ];
 
@@ -130,7 +167,7 @@ export function buildCommands(posts: readonly PostMeta[]): Command[] {
     };
   });
 
-  return [...postCommands, ...tagCommands, ...NAVIGATION, ...SOCIAL];
+  return [...postCommands, ...tagCommands, ...NAVIGATION, ...ACTIONS];
 }
 
 export function groupCommands(commands: readonly Command[]): CommandBlock[] {
