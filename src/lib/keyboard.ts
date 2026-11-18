@@ -176,6 +176,14 @@ function handleKeydown(event: KeyboardEvent): void {
 
 function handleClick(event: MouseEvent): void {
   if (event.defaultPrevented) return;
+
+  if (
+    mode === 'list' &&
+    !(event.target instanceof Element && event.target.closest(LIST_SELECTOR))
+  ) {
+    mode = 'normal';
+  }
+
   const trigger =
     event.target instanceof Element
       ? event.target.closest<HTMLElement>('[data-open-palette]')
