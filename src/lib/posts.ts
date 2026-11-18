@@ -10,6 +10,11 @@ export type PostMeta = {
   };
 };
 
+export function readingTime(body: string | undefined): number {
+  const words = (body ?? '').trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
 export function byDateDesc(a: { data: { date: string } }, b: { data: { date: string } }): number {
   return b.data.date.localeCompare(a.data.date);
 }
