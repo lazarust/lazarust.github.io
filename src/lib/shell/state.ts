@@ -1,35 +1,21 @@
-export type ShellLine = { kind: 'input' | 'output' | 'error'; text: string };
-export type ShellState = { cwd: string; history: string[]; lines: ShellLine[] };
-
-export const MAX_LINES = 200;
-export const MAX_HISTORY = 100;
+export type ShellState = { cwd: string };
 
 const STORAGE_KEY = 'tn-shell';
 const VERSION = 1;
+const MAX_CWD_LENGTH = 256;
 
 function emptyState(): ShellState {
-  return { cwd: '~', history: [], lines: [] };
+  return { cwd: '~' };
 }
 
-function isShellLine(value: unknown): value is ShellLine {
-  if (typeof value !== 'object' || value === null) return false;
-  const line = value as Record<string, unknown>;
+function validCwd(value: unknown): value is string {
   return (
-    (line.kind === 'input' || line.kind === 'output' || line.kind === 'error') &&
-    typeof line.text === 'string'
-  );
-}
-
-function isShellState(value: unknown): value is ShellState {
-  if (typeof value !== 'object' || value === null) return false;
-  const state = value as Record<string, unknown>;
-  return (
-    typeof state.cwd === 'string' &&
-    state.cwd.length > 0 &&
-    Array.isArray(state.history) &&
-    state.history.every((item) => typeof item === 'string') &&
-    Array.isArray(state.lines) &&
-    state.lines.every(isShellLine)
+    typeof value === 'string' &&
+    value.length > 0 &&
+    value.length <= MAX_CWD_LENGTH &&
+    (value === '~' || value.startsWith('~/')) &&
+    !value.includes('\0') &&
+    !value.split('/').includes('..')
   );
 }
 
@@ -42,13 +28,11 @@ export function load(): ShellState {
     if (typeof saved !== 'object' || saved === null) return emptyState();
 
     const record = saved as Record<string, unknown>;
-    if (record.version !== VERSION || !isShellState(record.state)) return emptyState();
-
-    return {
-      cwd: record.state.cwd,
-      history: record.state.history.slice(-MAX_HISTORY),
-      lines: record.state.lines.slice(-MAX_LINES),
-    };
+    if (record.version !== VERSION || typeof record.state !== 'object' || record.state === null) {
+      return emptyState();
+    }
+    const state = record.state as Record<string, unknown>;
+    return validCwd(state.cwd) ? { cwd: state.cwd } : emptyState();
   } catch {
     return emptyState();
   }
@@ -56,21 +40,13 @@ export function load(): ShellState {
 
 export function save(state: ShellState): void {
   try {
-    if (typeof localStorage === 'undefined') return;
+    if (typeof localStorage === 'undefined' || !validCwd(state.cwd)) return;
     localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
         version: VERSION,
-        state: {
-          cwd: state.cwd,
-          history: state.history.slice(-MAX_HISTORY),
-          lines: state.lines.slice(-MAX_LINES),
-        },
+        state: { cwd: state.cwd },
       }),
     );
   } catch {}
-}
-
-export function appendLine(state: ShellState, line: ShellLine): ShellState {
-  return { ...state, lines: [...state.lines, line].slice(-MAX_LINES) };
 }

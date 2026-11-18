@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { appendLine, load, MAX_LINES, save, type ShellState } from './state';
+import { load, save } from './state';
 
 function storageStub(initial?: string): Storage {
   const values = new Map<string, string>();
@@ -19,52 +19,47 @@ function storageStub(initial?: string): Storage {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('shell state', () => {
-  it('saves and loads valid state', () => {
-    vi.stubGlobal('localStorage', storageStub());
-    const state: ShellState = {
-      cwd: '~/blog',
-      history: ['pwd', 'ls'],
-      lines: [{ kind: 'output', text: '~/blog' }],
-    };
+  it('saves and loads the working directory only', () => {
+    const storage = storageStub();
+    vi.stubGlobal('localStorage', storage);
 
-    save(state);
+    save({ cwd: '~/blog' });
 
-    expect(load()).toEqual(state);
+    expect(load()).toEqual({ cwd: '~/blog' });
+    expect(JSON.parse(storage.getItem('tn-shell') ?? '{}')).toEqual({
+      version: 1,
+      state: { cwd: '~/blog' },
+    });
   });
 
   it('rejects malformed JSON and unsupported state versions', () => {
     vi.stubGlobal('localStorage', storageStub('{'));
-    expect(load()).toEqual({ cwd: '~', history: [], lines: [] });
+    expect(load()).toEqual({ cwd: '~' });
 
     vi.stubGlobal(
       'localStorage',
-      storageStub(JSON.stringify({ version: 2, state: { cwd: '~/blog', history: [], lines: [] } })),
+      storageStub(JSON.stringify({ version: 2, state: { cwd: '~/blog' } })),
     );
-    expect(load()).toEqual({ cwd: '~', history: [], lines: [] });
+    expect(load()).toEqual({ cwd: '~' });
   });
 
-  it('rejects malformed state entries', () => {
+  it('rejects malformed or oversized working directories', () => {
     vi.stubGlobal(
       'localStorage',
-      storageStub(
-        JSON.stringify({
-          version: 1,
-          state: { cwd: '~/blog', history: ['pwd'], lines: [{ kind: 'unknown', text: 'bad' }] },
-        }),
-      ),
+      storageStub(JSON.stringify({ version: 1, state: { cwd: '../blog' } })),
     );
-    expect(load()).toEqual({ cwd: '~', history: [], lines: [] });
+    expect(load()).toEqual({ cwd: '~' });
+
+    vi.stubGlobal(
+      'localStorage',
+      storageStub(JSON.stringify({ version: 1, state: { cwd: `~/${'x'.repeat(256)}` } })),
+    );
+    expect(load()).toEqual({ cwd: '~' });
   });
 
-  it('caps appended lines at 200 by dropping the oldest lines', () => {
-    const state: ShellState = { cwd: '~', history: [], lines: [] };
-    const capped = Array.from({ length: MAX_LINES + 2 }).reduce<ShellState>(
-      (current, _, index) => appendLine(current, { kind: 'output', text: String(index) }),
-      state,
-    );
-
-    expect(capped.lines).toHaveLength(MAX_LINES);
-    expect(capped.lines[0]?.text).toBe('2');
-    expect(capped.lines.at(-1)?.text).toBe(String(MAX_LINES + 1));
+  it('does not access localStorage when it is unavailable during SSR', () => {
+    vi.stubGlobal('localStorage', undefined);
+    expect(load()).toEqual({ cwd: '~' });
+    expect(() => save({ cwd: '~/blog' })).not.toThrow();
   });
 });
