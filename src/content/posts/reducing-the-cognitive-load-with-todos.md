@@ -1,7 +1,8 @@
 ---
 title: "Reducing the Cognitive Load with TODOs"
+description: "Why I write tasks down in Apple Reminders and TODO comments instead of holding them in my head, and how LLMs work better with them."
 draft: false
-date: 2025-05-13
+date: "2025-05-13"
 categories:
   - productivity
   - todo-list

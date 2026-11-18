@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { render, type CollectionEntry } from 'astro:content';
 import { getPublishedPosts } from '../../lib/posts';
+import { formatPostDate } from '../../lib/dates';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -25,8 +26,8 @@ const { Content } = await render(post);
   <article class="post-content">
     <header class="post-header">
       <h1>{post.data.title}</h1>
-      <time datetime={post.data.date.toISOString()}>
-        {post.data.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+      <time datetime={post.data.date}>
+        {formatPostDate(post.data.date, 'long')}
       </time>
     </header>
     <Content />

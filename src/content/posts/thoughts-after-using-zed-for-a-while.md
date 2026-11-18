@@ -1,7 +1,8 @@
 ---
 title: "Thoughts After Using Zed For A While"
+description: "What I like about Zed — speed, open source, Vim motions, and easy LLM switching — plus missing Pytest and Docker remote support."
 draft: false
-date: 2024-10-08
+date: "2024-10-08"
 categories:
   - zed
   - ollama

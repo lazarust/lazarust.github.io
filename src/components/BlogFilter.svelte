@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { formatPostDate } from '../lib/dates';
 
   let { posts } = $props();
 
@@ -142,9 +143,7 @@
   });
 
   function fmt(date) {
-    const d = new Date(date);
-    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
-    return `${dateStr}<span class="ls-time">, ${d.getFullYear()}</span>`;
+    return `${formatPostDate(date, 'short')}<span class="ls-time">, ${formatPostDate(date, 'year')}</span>`;
   }
 
   let cmd = $derived(activeTag ? `ls ${activeTag}/` : 'ls');

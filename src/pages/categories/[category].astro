@@ -1,19 +1,20 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { type CollectionEntry } from 'astro:content';
-import { getPublishedPosts } from '../../lib/posts';
+import { getPublishedPosts, byDateDesc } from '../../lib/posts';
+import { formatPostDate } from '../../lib/dates';
 
 export async function getStaticPaths() {
   const published = await getPublishedPosts();
-  const categories = [...new Set(published.flatMap((p: CollectionEntry<'posts'>) => p.data.categories ?? []))];
+  const categories = [...new Set(published.flatMap((p: CollectionEntry<'posts'>) => p.data.categories))];
   return categories.map(cat => ({
     params: { category: cat },
-    props: { category: cat, posts: published.filter((p: CollectionEntry<'posts'>) => p.data.categories?.includes(cat)) },
+    props: { category: cat, posts: published.filter((p: CollectionEntry<'posts'>) => p.data.categories.includes(cat)) },
   }));
 }
 
 const { category, posts } = Astro.props;
-const sorted = posts.sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'posts'>) => b.data.date.valueOf() - a.data.date.valueOf());
+const sorted = posts.sort(byDateDesc);
 ---
 
 <BaseLayout title={`Category: ${category}`}>
@@ -26,8 +27,8 @@ const sorted = posts.sort((a: CollectionEntry<'posts'>, b: CollectionEntry<'post
   <div class="ls-listing">
     {sorted.map((post: CollectionEntry<'posts'>) => (
       <div class="ls-row">
-        <span class="ls-date">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
-          <span class="ls-time">, {post.data.date.getFullYear()}</span></span>
+        <span class="ls-date">{formatPostDate(post.data.date, 'short')}
+          <span class="ls-time">, {formatPostDate(post.data.date, 'year')}</span></span>
         <a href={`/posts/${post.id}/`} data-nav-item data-list-item>{post.data.title}</a>
       </div>
     ))}

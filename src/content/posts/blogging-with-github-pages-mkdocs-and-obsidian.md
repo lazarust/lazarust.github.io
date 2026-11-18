@@ -1,7 +1,8 @@
 ---
 title: "Blogging with Github Pages, MkDocs, and Obsidian"
+description: "How I set up this blog with Obsidian as the editor, MkDocs Material for the site, and a GitHub Action that deploys to GitHub Pages."
 draft: false
-date: 2024-05-17
+date: "2024-05-17"
 categories:
   - blogging
   - obsidian
