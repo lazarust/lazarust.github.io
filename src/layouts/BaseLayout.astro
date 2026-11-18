@@ -7,10 +7,19 @@ import { ClientRouter } from 'astro:transitions';
 
 export interface Props {
   title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = 'Personal blog about data engineering, ML, and tools',
+  type = 'website',
+  publishedTime,
+} = Astro.props;
 const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
@@ -36,9 +45,15 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
     <link rel="alternate" type="application/rss+xml" title="Thomas' Blog" href="/rss.xml" />
     <meta name="generator" content={Astro.generator} />
     <meta property="og:title" content={siteTitle} />
-    <meta property="og:description" content="Personal blog about data engineering, ML, and tools" />
-    <meta property="og:url" content={Astro.url} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Thomas' Blog" />
+    <meta property="og:url" content={canonicalUrl} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    <meta name="twitter:card" content="summary" />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">

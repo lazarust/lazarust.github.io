@@ -28,7 +28,7 @@ const { category, posts } = Astro.props;
 const sorted = posts.sort(byDateDesc);
 ---
 
-<BaseLayout title={`Category: ${category}`}>
+<BaseLayout title={`Category: ${category}`} description={`Posts filed under ${category}`}>
   <h1 class="sr-only">Category: {category}</h1>
   <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>

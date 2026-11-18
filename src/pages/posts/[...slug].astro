@@ -18,7 +18,12 @@ const { Content, headings } = await render(post);
 const tocHeadings = headings.filter((heading) => heading.depth <= 3);
 ---
 
-<BaseLayout title={post.data.title}>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  publishedTime={post.data.date}
+>
   <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
       &larr; home
