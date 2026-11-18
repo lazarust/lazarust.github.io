@@ -328,6 +328,14 @@ kbd {
   flex-shrink: 0;
 }
 
+.post-categories {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
 .post-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { render } from 'astro:content';
 import { getPublishedPosts, readingTime } from '../../lib/posts';
 import { formatPostDate } from '../../lib/dates';
+import { slugify } from '../../lib/slug';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -40,6 +41,17 @@ const tocHeadings = headings.filter((heading) => heading.depth <= 3);
         <time datetime={post.data.date}>{formatPostDate(post.data.date, 'long')}</time>
         <span> · {readingTime(post.body)} min read</span>
       </div>
+      {post.data.categories.length > 0 && (
+        <ul class="post-categories" aria-label="Categories">
+          {post.data.categories.map((category) => (
+            <li>
+              <a class="tag" href={`/categories/${slugify(category)}/`}>
+                {category}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </header>
     {tocHeadings.length >= 3 && (
       <nav class="post-toc" aria-label="Table of contents">

@@ -2,13 +2,25 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPublishedPosts, byDateDesc } from '../../lib/posts';
 import { formatPostDate } from '../../lib/dates';
+import { slugify } from '../../lib/slug';
 
 export async function getStaticPaths() {
   const published = await getPublishedPosts();
-  const categories = [...new Set(published.flatMap((p) => p.data.categories))];
-  return categories.map((cat) => ({
-    params: { category: cat },
-    props: { category: cat, posts: published.filter((p) => p.data.categories.includes(cat)) },
+  const categories = new Map<
+    string,
+    { category: string; posts: Map<string, (typeof published)[number]> }
+  >();
+  for (const post of published) {
+    for (const category of post.data.categories) {
+      const slug = slugify(category);
+      const group = categories.get(slug) ?? { category, posts: new Map() };
+      group.posts.set(post.id, post);
+      categories.set(slug, group);
+    }
+  }
+  return [...categories].map(([slug, group]) => ({
+    params: { category: slug },
+    props: { category: group.category, posts: [...group.posts.values()] },
   }));
 }
 
