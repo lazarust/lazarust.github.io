@@ -3,7 +3,6 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/600.css';
 import '@fontsource/jetbrains-mono/400-italic.css';
 import '../styles/tokyonight.css';
-import KeyboardNav from '../components/KeyboardNav.svelte';
 
 export interface Props {
   title?: string;
@@ -28,33 +27,59 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">
+      skip to content
+    </a>
     <div class="app-shell">
-      <main class="editor-pane">
+      <main class="editor-pane" id="main-content" tabindex="-1">
         <slot />
       </main>
       <footer class="site-footer">
-        <div class="footer-links">
+        <nav class="footer-links" aria-label="Social links">
           <a href="https://github.com/lazarust" target="_blank" rel="noopener">
-            github
+            {' '}
+            github{' '}
           </a>
           <a href="https://bsky.app/profile/lazarust.bsky.social" target="_blank" rel="noopener">
             bluesky
           </a>
           <a href="https://twitter.com/lazarustda" target="_blank" rel="noopener">
-            x
+            {' '}
+            x{' '}
           </a>
           <a href="https://www.linkedin.com/in/td-lazarus" target="_blank" rel="noopener">
             linkedin
           </a>
           <a href="/rss.xml" target="_blank" rel="noopener">
-            rss
+            {' '}
+            rss{' '}
           </a>
-        </div>
+        </nav>
         <p class="footer-hint">
-          press <kbd>?</kbd> for keyboard shortcuts
+          <button
+            type="button"
+            class="footer-button"
+            aria-haspopup="dialog"
+            data-open-palette="search"
+          >
+            search
+          </button>
+          <button
+            type="button"
+            class="footer-button"
+            aria-haspopup="dialog"
+            data-open-palette="help"
+          >
+            shortcuts
+          </button>
+          <span>
+            or press <kbd>/</kbd> and <kbd>?</kbd>
+          </span>
         </p>
       </footer>
-      <KeyboardNav client:load />
     </div>
+    <script>
+      import '../lib/keyboard';
+    </script>
   </body>
 </html>
