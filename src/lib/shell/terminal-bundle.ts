@@ -1,6 +1,7 @@
 import pluginCss from 'jquery.terminal/css/jquery.terminal.css?inline';
 import $ from 'jquery';
 import 'jquery.terminal';
+import installUnixFormatting from 'jquery.terminal/js/unix_formatting';
 
 type TerminalInstance = JQueryTerminal;
 
@@ -12,6 +13,27 @@ export type TerminalOptions = {
 };
 
 let scopedStyles: HTMLStyleElement | null = null;
+let ansiInstalled = false;
+const ansiColors = {
+  black: 'var(--terminal-black)',
+  red: 'var(--terminal-red)',
+  green: 'var(--terminal-green)',
+  yellow: 'var(--terminal-yellow)',
+  blue: 'var(--terminal-blue)',
+  magenta: 'var(--terminal-purple)',
+  cyan: 'var(--terminal-cyan)',
+  white: 'var(--terminal-white)',
+};
+
+function installAnsiColors(): void {
+  if (ansiInstalled) return;
+  installUnixFormatting(window, $);
+  $.terminal.color_names.push(...Object.values(ansiColors));
+  Object.assign($.terminal.ansi_colors.normal, ansiColors);
+  Object.assign($.terminal.ansi_colors.faited, ansiColors);
+  Object.assign($.terminal.ansi_colors.bold, ansiColors);
+  ansiInstalled = true;
+}
 
 function splitSelectors(value: string): string[] {
   const selectors: string[] = [];
@@ -105,6 +127,7 @@ function installStyles(): void {
 
 export function createTerminal(host: HTMLElement, options: TerminalOptions): TerminalInstance {
   installStyles();
+  installAnsiColors();
   let terminal: TerminalInstance;
   const keymap: JQueryTerminal.keymapObject = {
     'CTRL+L': () => {

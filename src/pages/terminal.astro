@@ -6,7 +6,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="~/terminal" description="An interactive terminal for this site.">
   <h1 class="sr-only">Terminal</h1>
   <nav class="nav-links" aria-label="Terminal navigation">
-    <a href="/blog/">classic view</a>
+    <a class="terminal-classic" href="/blog/">
+      ← classic view
+    </a>
   </nav>
   <TerminalShell client:load mode="page" />
 </BaseLayout>

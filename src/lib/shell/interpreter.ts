@@ -33,7 +33,7 @@ const ANSI = {
   green: '\u001b[32m',
   blue: '\u001b[34m',
   cyan: '\u001b[36m',
-  highlight: '\u001b[30;43m',
+  highlight: '\u001b[1;33m',
 };
 
 const COMMANDS = [
