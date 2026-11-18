@@ -8,11 +8,7 @@ categories:
   - todo-list
 ---
 
-# Reducing the Cognitive Load with TODOs
-
 I've recently found myself working on some bigger projects requiring large code refactors. For personal household tasks I've been using the Apple Reminders app to keep track of what needs done when (even writing this blog post had to become a reminder for it to actually get done 😂).
-
-<!-- more -->
 
 A big reason I like using a reminders list to keep track of things, is that it lets me have the following workflow:
 

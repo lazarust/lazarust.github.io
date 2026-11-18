@@ -2,6 +2,8 @@
 title: "About Me"
 ---
 
+# About Me
+
 I'm a data Practitioner with 6+ years building production-grade data systems and ML-powered tooling. I enjoy the full stack of data work, from pipeline architecture and database optimization to deploying machine learning models that solve real problems.
 
 ## Projects
