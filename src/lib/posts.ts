@@ -10,16 +10,13 @@ export type PostMeta = {
   };
 };
 
-export function byDateDesc(
-  a: { data: { date: string } },
-  b: { data: { date: string } }
-): number {
+export function byDateDesc(a: { data: { date: string } }, b: { data: { date: string } }): number {
   return b.data.date.localeCompare(a.data.date);
 }
 
 export async function getPublishedPosts(): Promise<CollectionEntry<'posts'>[]> {
   const posts = await getCollection('posts', ({ data }: CollectionEntry<'posts'>) =>
-    import.meta.env.PROD ? !data.draft : true
+    import.meta.env.PROD ? !data.draft : true,
   );
 
   const seen = new Set<string>();
@@ -30,7 +27,7 @@ export async function getPublishedPosts(): Promise<CollectionEntry<'posts'>[]> {
   }
   if (duplicates.size > 0) {
     throw new Error(
-      `Duplicate post slugs in src/content/posts: ${[...duplicates].sort().join(', ')}`
+      `Duplicate post slugs in src/content/posts: ${[...duplicates].sort().join(', ')}`,
     );
   }
 

@@ -1,15 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { type CollectionEntry } from 'astro:content';
 import { getPublishedPosts, byDateDesc } from '../../lib/posts';
 import { formatPostDate } from '../../lib/dates';
 
 export async function getStaticPaths() {
   const published = await getPublishedPosts();
-  const categories = [...new Set(published.flatMap((p: CollectionEntry<'posts'>) => p.data.categories))];
-  return categories.map(cat => ({
+  const categories = [...new Set(published.flatMap((p) => p.data.categories))];
+  return categories.map((cat) => ({
     params: { category: cat },
-    props: { category: cat, posts: published.filter((p: CollectionEntry<'posts'>) => p.data.categories.includes(cat)) },
+    props: { category: cat, posts: published.filter((p) => p.data.categories.includes(cat)) },
   }));
 }
 
@@ -19,18 +18,26 @@ const sorted = posts.sort(byDateDesc);
 
 <BaseLayout title={`Category: ${category}`}>
   <h1 class="sr-only">Category: {category}</h1>
-  <nav class="nav-links"><a href="/" data-nav-item>&larr; home</a></nav>
+  <nav class="nav-links">
+    <a href="/" data-nav-item>
+      &larr; home
+    </a>
+  </nav>
   <div class="prompt-line">
     <span class="prompt-user">~/blog</span>
     <span class="prompt-sep">$</span>
     <span class="prompt-cmd">ls {category}/</span>
   </div>
   <div class="ls-listing">
-    {sorted.map((post: CollectionEntry<'posts'>) => (
+    {sorted.map((post) => (
       <div class="ls-row">
-        <span class="ls-date">{formatPostDate(post.data.date, 'short')}
-          <span class="ls-time">, {formatPostDate(post.data.date, 'year')}</span></span>
-        <a href={`/posts/${post.id}/`} data-nav-item data-list-item>{post.data.title}</a>
+        <span class="ls-date">
+          {formatPostDate(post.data.date, 'short')}
+          <span class="ls-time">, {formatPostDate(post.data.date, 'year')}</span>
+        </span>
+        <a href={`/posts/${post.id}/`} data-nav-item data-list-item>
+          {post.data.title}
+        </a>
       </div>
     ))}
   </div>

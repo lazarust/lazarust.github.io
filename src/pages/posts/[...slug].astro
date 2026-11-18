@@ -1,23 +1,30 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { render, type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
 import { getPublishedPosts } from '../../lib/posts';
 import { formatPostDate } from '../../lib/dates';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
-  return posts.map((post: CollectionEntry<'posts'>) => ({
+  return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
   }));
 }
 
-const { post } = Astro.props as unknown as { post: CollectionEntry<'posts'> };
+const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title}>
-  <nav class="nav-links"><a href="/" data-nav-item>&larr; home</a> <a href="/blog/" data-nav-item>&larr; blog</a></nav>
+  <nav class="nav-links">
+    <a href="/" data-nav-item>
+      &larr; home
+    </a>{' '}
+    <a href="/blog/" data-nav-item>
+      &larr; blog
+    </a>
+  </nav>
   <div class="prompt-line">
     <span class="prompt-user">~/blog</span>
     <span class="prompt-sep">$</span>
@@ -26,9 +33,7 @@ const { Content } = await render(post);
   <article class="post-content">
     <header class="post-header">
       <h1>{post.data.title}</h1>
-      <time datetime={post.data.date}>
-        {formatPostDate(post.data.date, 'long')}
-      </time>
+      <time datetime={post.data.date}>{formatPostDate(post.data.date, 'long')}</time>
     </header>
     <Content />
   </article>

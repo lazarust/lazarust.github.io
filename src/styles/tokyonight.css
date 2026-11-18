@@ -21,7 +21,9 @@
   --border: var(--surface-1);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -218,8 +220,12 @@ a[data-nav-item]:focus-visible {
   font-weight: 600;
 }
 
-.post-content h2 { font-size: 1.2rem; }
-.post-content h3 { font-size: 1.1rem; }
+.post-content h2 {
+  font-size: 1.2rem;
+}
+.post-content h3 {
+  font-size: 1.1rem;
+}
 
 .post-content p {
   margin-bottom: 1em;
@@ -393,4 +399,3 @@ a[data-nav-item]:focus-visible {
     gap: 1rem;
   }
 }
-
