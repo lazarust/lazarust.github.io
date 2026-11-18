@@ -16,6 +16,7 @@ let lastKey: string | null = null;
 let lastKeyAt = 0;
 let paletteOpen = false;
 let opening = false;
+let mountedPaletteClose: (() => void) | null = null;
 
 const REGISTRY = new Map(buildCommands([]).map((command) => [command.id, command]));
 const CONTEXT: CommandContext = {
@@ -43,23 +44,26 @@ export async function openPalette(paletteMode: PaletteMode = 'search'): Promise<
     const container = host;
 
     let closed = false;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      unmount(app);
+      container.remove();
+      paletteOpen = false;
+      mode = 'normal';
+      lastKey = null;
+      if (mountedPaletteClose === close) mountedPaletteClose = null;
+      if (restoreTo?.isConnected) restoreTo.focus();
+    };
     const app = mount(CommandPalette, {
       target: host,
       props: {
         mode: paletteMode,
-        onclose: () => {
-          if (closed) return;
-          closed = true;
-          unmount(app);
-          container.remove();
-          paletteOpen = false;
-          mode = 'normal';
-          lastKey = null;
-          if (restoreTo?.isConnected) restoreTo.focus();
-        },
+        onclose: close,
       },
     });
 
+    mountedPaletteClose = close;
     paletteOpen = true;
     mode = 'modal';
     lastKey = null;
@@ -70,6 +74,10 @@ export async function openPalette(paletteMode: PaletteMode = 'search'): Promise<
   } finally {
     opening = false;
   }
+}
+
+export function closePalette(): void {
+  mountedPaletteClose?.();
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
@@ -203,6 +211,15 @@ function install(): void {
 
   document.addEventListener('keydown', handleKeydown);
   document.addEventListener('click', handleClick);
+  document.addEventListener('astro:before-swap', () => {
+    closePalette();
+    mode = 'normal';
+    lastKey = null;
+  });
+  document.addEventListener('astro:page-load', () => {
+    mode = 'normal';
+    lastKey = null;
+  });
 }
 
 install();

@@ -1,6 +1,8 @@
+import { navigate as astroNavigate } from 'astro:transitions/client';
+
 export function navigate(href: string): void {
   if (typeof window === 'undefined') return;
-  window.location.assign(href);
+  void astroNavigate(href);
 }
 
 export function openExternal(href: string): void {
