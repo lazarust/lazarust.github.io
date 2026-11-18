@@ -3,6 +3,7 @@
   import { buildCommands, groupCommands, searchCommands, type Command } from '../lib/commands';
   import { KEYMAP, type KeyBinding } from '../lib/keymap';
   import { isExternal, navigate, openExternal } from '../lib/navigate';
+  import { openShell } from '../lib/keyboard';
   import { loadPosts } from '../lib/postIndex';
   import type { PostMeta } from '../lib/posts';
 
@@ -134,7 +135,12 @@
       else navigate(command.href);
       return;
     }
-    command.run?.({ navigate, openExternal, openPalette: () => {} });
+    command.run?.({
+      navigate,
+      openExternal,
+      openPalette: () => {},
+      openShell: () => void openShell(),
+    });
   }
 </script>
 

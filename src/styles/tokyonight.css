@@ -216,6 +216,156 @@ kbd {
   color: var(--fg);
 }
 
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.shell-dialog {
+  width: min(56rem, calc(100vw - 2rem));
+  max-height: min(80vh, 48rem);
+  margin: auto;
+  padding: 1rem;
+  border: 1px solid var(--blue);
+  border-radius: 4px;
+  background: var(--surface-0);
+  color: var(--fg);
+  font: inherit;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.shell-dialog::backdrop {
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+}
+
+.shell-surface {
+  --background: var(--bg);
+  --color: var(--fg);
+  --original-color: var(--fg-bright);
+  --original-background: var(--bg);
+  --link-color: var(--blue);
+  --terminal-black: var(--bg);
+  --terminal-red: var(--red);
+  --terminal-green: var(--green);
+  --terminal-yellow: var(--yellow);
+  --terminal-blue: var(--blue);
+  --terminal-purple: var(--purple);
+  --terminal-cyan: var(--cyan);
+  --terminal-white: var(--fg-bright);
+  --font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --size: 1;
+  --glow: 0;
+  --text-shadow: none;
+  width: 100%;
+  height: min(64vh, 44rem);
+  min-height: 22rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--color);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 12%);
+}
+
+.shell-surface .terminal {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  background: var(--background);
+  color: var(--color);
+  font-family: var(--font);
+  font-size: 0.9rem;
+}
+
+.shell-surface .cmd {
+  font-family: var(--font);
+  font-size: 0.9rem;
+}
+
+.shell-surface .terminal-output > div:not(.raw) div {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.shell-dialog .shell-surface {
+  height: min(60vh, 34rem);
+  min-height: 16rem;
+}
+
+.shell-close {
+  display: block;
+  margin: 0 0 0.75rem auto;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--surface-2);
+  border-radius: 3px;
+  background: var(--surface-1);
+  color: var(--fg-bright);
+  font: inherit;
+  cursor: pointer;
+}
+
+.shell-close:hover {
+  border-color: var(--blue);
+  color: var(--cyan);
+}
+
+.terminal-classic {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--blue);
+  border-radius: 3px;
+  background: var(--surface-0);
+  color: var(--fg-bright);
+  font-weight: 600;
+}
+
+.terminal-classic:hover {
+  background: var(--surface-1);
+  color: var(--cyan);
+}
+
+html[data-theme='storm'] .shell-surface {
+  --background: var(--bg);
+  --color: var(--fg);
+  --original-color: var(--fg-bright);
+  --original-background: var(--bg);
+  --link-color: var(--blue);
+}
+
+html[data-theme='night'] .shell-surface {
+  --background: var(--bg);
+  --color: var(--fg);
+  --original-color: var(--fg-bright);
+  --original-background: var(--bg);
+  --link-color: var(--blue);
+}
+
+html[data-theme='moon'] .shell-surface {
+  --background: var(--bg);
+  --color: var(--fg);
+  --original-color: var(--fg-bright);
+  --original-background: var(--bg);
+  --link-color: var(--blue);
+}
+
+html[data-theme='day'] .shell-surface {
+  --background: var(--bg);
+  --color: var(--fg);
+  --original-color: var(--fg-bright);
+  --original-background: var(--bg);
+  --link-color: var(--blue);
+  --terminal-black: #24283b;
+  --terminal-red: #a31742;
+  --terminal-green: #3c5b22;
+  --terminal-yellow: #66502d;
+  --terminal-blue: #1f4f9f;
+  --terminal-purple: #633aa5;
+  --terminal-cyan: #00536f;
+  --terminal-white: #2e3a6b;
+}
+
 .nav-links {
   display: flex;
   gap: 1.5rem;
