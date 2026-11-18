@@ -4,7 +4,7 @@ import BlogFilter from '../../components/BlogFilter.svelte';
 import { getPublishedPosts, byDateDesc, serializePost } from '../../lib/posts';
 
 const posts = await getPublishedPosts();
-const sorted = posts.sort(byDateDesc);
+const sorted = [...posts].sort(byDateDesc);
 const postData = sorted.map(serializePost);
 ---
 
