@@ -192,7 +192,7 @@
         {#each blocks as block (block.group)}
           <li role="group" aria-label={block.group} class="palette-block">
             <p class="palette-group" aria-hidden="true">{block.group}</p>
-            <ul class="palette-options">
+            <ul class="palette-options" role="presentation">
               {#each block.commands as command (command.id)}
                 <li
                   id={optionId(command)}
@@ -205,6 +205,7 @@
                     <a
                       class="palette-entry"
                       href={command.href}
+                      tabindex="-1"
                       target={isExternal(command.href) ? '_blank' : undefined}
                       rel={isExternal(command.href) ? 'noopener noreferrer' : undefined}
                       onclick={(event) => {
