@@ -4,7 +4,14 @@
   import { formatPostDate } from '../lib/dates';
   import { isExternal, navigate, openExternal } from '../lib/navigate';
   import { loadPosts } from '../lib/postIndex';
-  import { appendLine, load, MAX_HISTORY, save, type ShellLine } from '../lib/shell/state';
+  import {
+    appendLine,
+    load,
+    MAX_HISTORY,
+    save,
+    type ShellLine,
+    type ShellState,
+  } from '../lib/shell/state';
   import { parse } from '../lib/shell/parse';
   import { buildTree, completePath, listChildren, resolvePath, type Node } from '../lib/shell/vfs';
   import type { PostMeta } from '../lib/posts';
@@ -48,7 +55,7 @@
     ':wq': ':wq — show the static-site message',
   };
 
-  let shellState = $state(load());
+  let shellState = $state<ShellState>({ cwd: '~', history: [], lines: [] });
   let posts = $state<PostMeta[]>([]);
   let root = $state<Node>(buildTree([]));
   let commandInput = $state('');
@@ -60,6 +67,8 @@
   let commands = $derived(buildCommands(posts));
 
   onMount(() => {
+    shellState = load();
+
     if (mode === 'overlay' && dialog && !dialog.open) dialog.showModal();
     if (mode === 'page') inputElement?.focus();
 
