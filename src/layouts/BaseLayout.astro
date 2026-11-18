@@ -17,6 +17,18 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('tn-theme');
+          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          const theme = saved ?? (prefersLight ? 'day' : 'night');
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'night';
+        }
+      })();
+    </script>
     <ClientRouter />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{siteTitle}</title>

@@ -220,6 +220,13 @@ function install(): void {
     mode = 'normal';
     lastKey = null;
   });
+  const applyTheme = () => {
+    try {
+      const theme = localStorage.getItem('tn-theme');
+      if (theme) document.documentElement.dataset.theme = theme;
+    } catch {}
+  };
+  document.addEventListener('astro:after-swap', applyTheme);
 }
 
 install();
