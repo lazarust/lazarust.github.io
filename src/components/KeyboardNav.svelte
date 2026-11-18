@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
   let focusedIndex = $state(-1);
   let hintOpen = $state(false);
 
-  function getItems() {
-    const listItems = [...document.querySelectorAll('[data-list-item]')];
+  function getItems(): HTMLElement[] {
+    const listItems = [...document.querySelectorAll<HTMLElement>('[data-list-item]')];
     if (listItems.length > 0) return listItems;
-    return [...document.querySelectorAll('[data-nav-item]')];
+    return [...document.querySelectorAll<HTMLElement>('[data-nav-item]')];
   }
 
-  function focusItem(index) {
+  function focusItem(index: number) {
     const items = getItems();
     if (items.length === 0) return;
     const idx = Math.max(0, Math.min(index, items.length - 1));
@@ -20,10 +20,10 @@
     el?.scrollIntoView({ block: 'nearest' });
   }
 
-  function handleKeydown(e) {
-    const tag = e.target;
-    if (tag instanceof HTMLInputElement || tag instanceof HTMLTextAreaElement) return;
-    if (tag?.isContentEditable) return;
+  function handleKeydown(e: KeyboardEvent) {
+    const target = e.target;
+    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) return;
+    if (target instanceof HTMLElement && target.isContentEditable) return;
 
     if (hintOpen) {
       if (e.key === 'Escape' || e.key === 'q' || e.key === '?') {
@@ -53,11 +53,31 @@
       return;
     }
 
-    if (e.key === 'g') { e.preventDefault(); window.open('https://github.com/lazarust', '_blank', 'noopener,noreferrer'); return; }
-    if (e.key === 'b') { e.preventDefault(); window.open('https://bsky.app/profile/lazarust.bsky.social', '_blank', 'noopener,noreferrer'); return; }
-    if (e.key === 'x') { e.preventDefault(); window.open('https://twitter.com/lazarustda', '_blank', 'noopener,noreferrer'); return; }
-    if (e.key === 'l') { e.preventDefault(); window.open('https://www.linkedin.com/in/td-lazarus', '_blank', 'noopener,noreferrer'); return; }
-    if (e.key === 'r') { e.preventDefault(); window.location.href = '/rss.xml'; return; }
+    if (e.key === 'g') {
+      e.preventDefault();
+      window.open('https://github.com/lazarust', '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (e.key === 'b') {
+      e.preventDefault();
+      window.open('https://bsky.app/profile/lazarust.bsky.social', '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (e.key === 'x') {
+      e.preventDefault();
+      window.open('https://twitter.com/lazarustda', '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (e.key === 'l') {
+      e.preventDefault();
+      window.open('https://www.linkedin.com/in/td-lazarus', '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (e.key === 'r') {
+      e.preventDefault();
+      window.location.href = '/rss.xml';
+      return;
+    }
 
     if (e.key === '?') {
       e.preventDefault();
@@ -73,7 +93,7 @@
 </script>
 
 {#if hintOpen}
-  <div class="hint-overlay" onclick={() => hintOpen = false} role="presentation">
+  <div class="hint-overlay" onclick={() => (hintOpen = false)} role="presentation">
     <dialog open class="hint-dialog" aria-modal="true" aria-labelledby="hint-title">
       <h2 id="hint-title">Keybinds</h2>
       <div class="hint-list">
@@ -90,7 +110,9 @@
         <div class="hint-row"><kbd>r</kbd><span class="hint-arrow">&rarr;</span> RSS feed</div>
         <hr class="hint-divider" />
         <div class="hint-row"><kbd>?</kbd><span class="hint-arrow">&rarr;</span> Show keybinds</div>
-        <div class="hint-row"><kbd>Esc</kbd><span class="hint-arrow">&rarr;</span> Close keybinds</div>
+        <div class="hint-row">
+          <kbd>Esc</kbd><span class="hint-arrow">&rarr;</span> Close keybinds
+        </div>
       </div>
     </dialog>
   </div>
@@ -118,7 +140,7 @@
     background: var(--surface-0);
     color: var(--fg);
     padding: 2rem 2.5rem 2.5rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     border-radius: 4px;
   }
 

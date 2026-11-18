@@ -1,50 +1,53 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { formatPostDate } from '../lib/dates';
+  import type { PostMeta } from '../lib/posts';
 
-  let { posts } = $props();
+  interface Props {
+    posts: PostMeta[];
+  }
 
-  let activeTag = $state(null);
-  let searchMode = $state(null);
+  type SearchMode = 'tags' | 'posts';
+
+  let { posts }: Props = $props();
+
+  let activeTag = $state<string | null>(null);
+  let searchMode = $state<SearchMode | null>(null);
   let searchQuery = $state('');
   let searchIndex = $state(0);
   let tPressed = $state(false);
-  let tTimer = $state(null);
+  let tTimer = $state<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  let allCategories = $derived(
-    [...new Set(posts.flatMap(p => p.data.categories ?? []))].sort()
-  );
+  let allCategories = $derived([...new Set(posts.flatMap((p) => p.data.categories))].sort());
+
+  let filtered = $derived.by(() => {
+    const tag = activeTag;
+    return tag ? posts.filter((p) => p.data.categories.includes(tag)) : posts;
+  });
 
   let tagSearchResults = $derived(
     searchQuery === ''
       ? allCategories
-      : allCategories.filter(cat => cat.toLowerCase().includes(searchQuery.toLowerCase()))
+      : allCategories.filter((cat) => cat.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   let postSearchResults = $derived(
     searchQuery === ''
       ? filtered
-      : filtered.filter(post =>
-          post.data.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.slug.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+      : filtered.filter(
+          (post) =>
+            post.data.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            post.slug.toLowerCase().includes(searchQuery.toLowerCase()),
+        ),
   );
 
-  let currentResults = $derived(
-    searchMode === 'tags' ? tagSearchResults : postSearchResults
-  );
+  let currentResults = $derived(searchMode === 'tags' ? tagSearchResults : postSearchResults);
 
-  let filtered = $derived(
-    activeTag
-      ? posts.filter(p => p.data.categories?.includes(activeTag))
-      : posts
-  );
-
-  function toggleTag(cat) {
+  function toggleTag(cat: string) {
     activeTag = activeTag === cat ? null : cat;
   }
 
-  function enterSearch(mode) {
+  function enterSearch(mode: SearchMode) {
     searchMode = mode;
     searchQuery = '';
     searchIndex = 0;
@@ -56,38 +59,52 @@
     searchIndex = 0;
   }
 
-  function isTypableTarget(tag) {
+  function isTypableTarget(tag: unknown): boolean {
     if (tag instanceof HTMLInputElement || tag instanceof HTMLTextAreaElement) return true;
-    if (tag?.isContentEditable) return true;
+    if (tag instanceof HTMLElement && tag.isContentEditable) return true;
     return false;
   }
 
-  function handleKeydown(e) {
+  function resultLabel(item: string | PostMeta): string {
+    return typeof item === 'string' ? item : item.data.title;
+  }
+
+  function handleKeydown(e: KeyboardEvent) {
     if (searchMode) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      if (e.key === 'Escape') { exitSearch(); return; }
-      if (e.key === 'Backspace') { searchQuery = searchQuery.slice(0, -1); searchIndex = 0; return; }
+      if (e.key === 'Escape') {
+        exitSearch();
+        return;
+      }
+      if (e.key === 'Backspace') {
+        searchQuery = searchQuery.slice(0, -1);
+        searchIndex = 0;
+        return;
+      }
 
       if (e.key === 'ArrowDown' || e.key === 'j') {
         if (currentResults.length > 0) searchIndex = (searchIndex + 1) % currentResults.length;
         return;
       }
       if (e.key === 'ArrowUp' || e.key === 'k') {
-        if (currentResults.length > 0) searchIndex = (searchIndex - 1 + currentResults.length) % currentResults.length;
+        if (currentResults.length > 0)
+          searchIndex = (searchIndex - 1 + currentResults.length) % currentResults.length;
         return;
       }
 
       if (e.key === 'Enter') {
         if (searchMode === 'tags') {
-          if (tagSearchResults[searchIndex]) toggleTag(tagSearchResults[searchIndex]);
+          const tag = tagSearchResults[searchIndex];
+          if (tag) toggleTag(tag);
           exitSearch();
         } else if (searchMode === 'posts') {
-          if (postSearchResults[searchIndex]) {
-            window.location.href = `/posts/${postSearchResults[searchIndex].slug}/`;
+          const post = postSearchResults[searchIndex];
+          if (post) {
+            window.location.href = `/posts/${post.slug}/`;
           }
         }
         return;
@@ -113,7 +130,9 @@
       e.preventDefault();
       tPressed = true;
       clearTimeout(tTimer);
-      tTimer = setTimeout(() => { tPressed = false; }, 1000);
+      tTimer = setTimeout(() => {
+        tPressed = false;
+      }, 1000);
       return;
     }
 
@@ -142,7 +161,7 @@
     return () => window.removeEventListener('keydown', handleKeydown, true);
   });
 
-  function fmt(date) {
+  function fmt(date: string): string {
     return `${formatPostDate(date, 'short')}<span class="ls-time">, ${formatPostDate(date, 'year')}</span>`;
   }
 
@@ -160,11 +179,9 @@
   <div class="tag-bar">
     <span class="tag-label">tags:</span>
     {#each allCategories as cat}
-      <button
-        class="tag"
-        class:active={activeTag === cat}
-        onclick={() => toggleTag(cat)}
-      >{cat}</button>
+      <button class="tag" class:active={activeTag === cat} onclick={() => toggleTag(cat)}>
+        {cat}
+      </button>
     {/each}
   </div>
 {/if}
@@ -183,9 +200,7 @@
       <div class="search-results">
         {#each currentResults as item, i}
           <div class="search-result" class:selected={i === searchIndex}>
-            {searchMode === 'tags'
-              ? item
-              : item.data.title}
+            {resultLabel(item)}
           </div>
         {/each}
       </div>
@@ -214,7 +229,7 @@
         <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>
           {post.data.title}
         </a>
-        {#if post.data.categories?.length > 0}
+        {#if post.data.categories.length > 0}
           <span class="post-tags">
             {#each post.data.categories as cat}
               <button class="tag" onclick={() => toggleTag(cat)}>{cat}</button>
@@ -310,7 +325,9 @@
   }
 
   @keyframes blink {
-    50% { opacity: 0; }
+    50% {
+      opacity: 0;
+    }
   }
 
   .search-results {
