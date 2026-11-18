@@ -4,16 +4,17 @@ import BlogFilter from '../../components/BlogFilter.svelte';
 import { getPublishedPosts, byDateDesc, serializePost } from '../../lib/posts';
 
 const posts = await getPublishedPosts();
-const sorted = posts.sort(byDateDesc);
+const sorted = [...posts].sort(byDateDesc);
 const postData = sorted.map(serializePost);
 ---
 
 <BaseLayout title="~/blog">
   <h1 class="sr-only">Blog</h1>
-  <nav class="nav-links">
+  <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
       &larr; home
     </a>
+    <span aria-current="page">blog</span>
   </nav>
 
   <BlogFilter client:load posts={postData} />

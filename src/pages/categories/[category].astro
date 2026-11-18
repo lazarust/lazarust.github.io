@@ -18,10 +18,11 @@ const sorted = posts.sort(byDateDesc);
 
 <BaseLayout title={`Category: ${category}`}>
   <h1 class="sr-only">Category: {category}</h1>
-  <nav class="nav-links">
+  <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
       &larr; home
     </a>
+    <span aria-current="page">{category}</span>
   </nav>
   <div class="prompt-line">
     <span class="prompt-user">~/blog</span>

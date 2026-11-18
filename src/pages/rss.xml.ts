@@ -10,7 +10,7 @@ export const GET: APIRoute = async (context) => {
   }
 
   const posts = await getPublishedPosts();
-  const sorted = posts.sort(byDateDesc);
+  const sorted = [...posts].sort(byDateDesc);
   return rss({
     title: "Thomas' Blog",
     description: 'Personal blog about data engineering, ML, and tools',
