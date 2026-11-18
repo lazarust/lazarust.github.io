@@ -1,172 +1,93 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { formatPostDate } from '../lib/dates';
+  import {
+    blogQueryString,
+    parseBlogQuery,
+    sortPosts,
+    SORT_OPTIONS,
+    type SortMode,
+  } from '../lib/blogQuery';
   import type { PostMeta } from '../lib/posts';
 
   interface Props {
     posts: PostMeta[];
   }
 
-  type SearchMode = 'tags' | 'posts';
-
   let { posts }: Props = $props();
 
   let activeTag = $state<string | null>(null);
-  let searchMode = $state<SearchMode | null>(null);
-  let searchQuery = $state('');
-  let searchIndex = $state(0);
-  let tPressed = $state(false);
-  let tTimer = $state<ReturnType<typeof setTimeout> | undefined>(undefined);
+  let sort = $state<SortMode>('date-desc');
 
-  let allCategories = $derived([...new Set(posts.flatMap((p) => p.data.categories))].sort());
+  let tagCounts = $derived.by(() => {
+    const counts = new Map<string, number>();
+    for (const post of posts) {
+      for (const category of post.data.categories) {
+        counts.set(category, (counts.get(category) ?? 0) + 1);
+      }
+    }
+    return counts;
+  });
+
+  let categories = $derived([...tagCounts.keys()].sort());
 
   let filtered = $derived.by(() => {
     const tag = activeTag;
-    return tag ? posts.filter((p) => p.data.categories.includes(tag)) : posts;
+    const visible = tag ? posts.filter((post) => post.data.categories.includes(tag)) : posts;
+    return sortPosts(visible, sort);
   });
-
-  let tagSearchResults = $derived(
-    searchQuery === ''
-      ? allCategories
-      : allCategories.filter((cat) => cat.toLowerCase().includes(searchQuery.toLowerCase())),
-  );
-
-  let postSearchResults = $derived(
-    searchQuery === ''
-      ? filtered
-      : filtered.filter(
-          (post) =>
-            post.data.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            post.slug.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
-  );
-
-  let currentResults = $derived(searchMode === 'tags' ? tagSearchResults : postSearchResults);
-
-  function toggleTag(cat: string) {
-    activeTag = activeTag === cat ? null : cat;
-  }
-
-  function enterSearch(mode: SearchMode) {
-    searchMode = mode;
-    searchQuery = '';
-    searchIndex = 0;
-  }
-
-  function exitSearch() {
-    searchMode = null;
-    searchQuery = '';
-    searchIndex = 0;
-  }
-
-  function isTypableTarget(tag: unknown): boolean {
-    if (tag instanceof HTMLInputElement || tag instanceof HTMLTextAreaElement) return true;
-    if (tag instanceof HTMLElement && tag.isContentEditable) return true;
-    return false;
-  }
-
-  function resultLabel(item: string | PostMeta): string {
-    return typeof item === 'string' ? item : item.data.title;
-  }
-
-  function handleKeydown(e: KeyboardEvent) {
-    if (searchMode) {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      if (e.key === 'Escape') {
-        exitSearch();
-        return;
-      }
-      if (e.key === 'Backspace') {
-        searchQuery = searchQuery.slice(0, -1);
-        searchIndex = 0;
-        return;
-      }
-
-      if (e.key === 'ArrowDown' || e.key === 'j') {
-        if (currentResults.length > 0) searchIndex = (searchIndex + 1) % currentResults.length;
-        return;
-      }
-      if (e.key === 'ArrowUp' || e.key === 'k') {
-        if (currentResults.length > 0)
-          searchIndex = (searchIndex - 1 + currentResults.length) % currentResults.length;
-        return;
-      }
-
-      if (e.key === 'Enter') {
-        if (searchMode === 'tags') {
-          const tag = tagSearchResults[searchIndex];
-          if (tag) toggleTag(tag);
-          exitSearch();
-        } else if (searchMode === 'posts') {
-          const post = postSearchResults[searchIndex];
-          if (post) {
-            window.location.href = `/posts/${post.slug}/`;
-          }
-        }
-        return;
-      }
-
-      if (e.key.length === 1) {
-        searchQuery += e.key;
-        searchIndex = 0;
-      }
-      return;
-    }
-
-    if (isTypableTarget(e.target)) return;
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-
-    if (e.key === 'Escape' && activeTag) {
-      e.preventDefault();
-      activeTag = null;
-      return;
-    }
-
-    if (e.key === 't') {
-      e.preventDefault();
-      tPressed = true;
-      clearTimeout(tTimer);
-      tTimer = setTimeout(() => {
-        tPressed = false;
-      }, 1000);
-      return;
-    }
-
-    if (e.key === '/' && tPressed) {
-      e.preventDefault();
-      tPressed = false;
-      clearTimeout(tTimer);
-      enterSearch('tags');
-      return;
-    }
-
-    if (e.key === '/') {
-      e.preventDefault();
-      enterSearch('posts');
-      return;
-    }
-
-    if (tPressed) {
-      tPressed = false;
-      clearTimeout(tTimer);
-    }
-  }
-
-  onMount(() => {
-    window.addEventListener('keydown', handleKeydown, true);
-    return () => window.removeEventListener('keydown', handleKeydown, true);
-  });
-
-  function fmt(date: string): string {
-    return `${formatPostDate(date, 'short')}<span class="ls-time">, ${formatPostDate(date, 'year')}</span>`;
-  }
 
   let cmd = $derived(activeTag ? `ls ${activeTag}/` : 'ls');
-  let searchPlaceholder = $derived(searchMode === 'tags' ? 'filter tags...' : 'filter posts...');
+  let summary = $derived(`${filtered.length} ${filtered.length === 1 ? 'post' : 'posts'}`);
+
+  onMount(() => {
+    const restored = parseBlogQuery(window.location.search);
+    if (restored.tag && tagCounts.has(restored.tag)) activeTag = restored.tag;
+    sort = restored.sort;
+  });
+
+  function writeUrl(): void {
+    const query = blogQueryString(activeTag, sort);
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}${query}${window.location.hash}`,
+    );
+  }
+
+  function focusedSlug(): string | null {
+    if (!(document.activeElement instanceof Element)) return null;
+    return (
+      document.activeElement.closest<HTMLElement>('[data-post-slug]')?.dataset.postSlug ?? null
+    );
+  }
+
+  async function restoreFocus(slug: string | null, fallback: string): Promise<void> {
+    await tick();
+    if (slug) {
+      const link = document.querySelector<HTMLElement>(`[data-post-slug="${CSS.escape(slug)}"] a`);
+      if (link) {
+        link.focus();
+        return;
+      }
+    }
+    document.querySelector<HTMLElement>(fallback)?.focus();
+  }
+
+  async function toggleTag(category: string): Promise<void> {
+    const slug = focusedSlug();
+    activeTag = activeTag === category ? null : category;
+    writeUrl();
+    await restoreFocus(slug, `[data-tag="${CSS.escape(category)}"]`);
+  }
+
+  async function changeSort(next: SortMode): Promise<void> {
+    if (next === sort) return;
+    const slug = focusedSlug();
+    sort = next;
+    writeUrl();
+    await restoreFocus(slug, `[data-sort="${next}"]`);
+  }
 </script>
 
 <div class="prompt-line">
@@ -175,190 +96,105 @@
   <span class="prompt-cmd">{cmd}</span>
 </div>
 
-{#if allCategories.length > 0}
-  <div class="tag-bar">
+{#if categories.length > 0}
+  <div class="tag-bar" role="group" aria-label="Filter by tag">
     <span class="tag-label">tags:</span>
-    {#each allCategories as cat}
-      <button class="tag" class:active={activeTag === cat} onclick={() => toggleTag(cat)}>
-        {cat}
+    {#each categories as category (category)}
+      <button
+        type="button"
+        class="tag"
+        data-tag={category}
+        aria-pressed={activeTag === category}
+        onclick={() => toggleTag(category)}
+      >
+        {category}
+        <span class="tag-count">{tagCounts.get(category)}</span>
       </button>
     {/each}
   </div>
 {/if}
 
-<div class="search-hints">
-  <span>press <kbd>/</kbd> to search posts</span>
-  <span>press <kbd>t</kbd><kbd>/</kbd> to search tags</span>
-  {#if activeTag}<span>press <kbd>Esc</kbd> to clear filter</span>{/if}
+<div class="sort-bar" role="group" aria-label="Sort posts">
+  <span class="tag-label">sort:</span>
+  {#each SORT_OPTIONS as option (option.value)}
+    <button
+      type="button"
+      class="tag"
+      data-sort={option.value}
+      aria-label={option.ariaLabel}
+      aria-pressed={sort === option.value}
+      onclick={() => changeSort(option.value)}
+    >
+      {option.label}
+    </button>
+  {/each}
 </div>
 
-{#if searchMode}
-  <div class="search-box" class:tag-mode={searchMode === 'tags'}>
-    <span class="search-prompt">{searchMode === 'tags' ? 'tags>' : 'posts>'}</span>
-    <span class="search-query">{searchQuery}<span class="search-cursor">&#9608;</span></span>
-    {#if currentResults.length > 0}
-      <div class="search-results">
-        {#each currentResults as item, i}
-          <div class="search-result" class:selected={i === searchIndex}>
-            {resultLabel(item)}
-          </div>
-        {/each}
-      </div>
-    {:else}
-      <div class="search-results">
-        <div class="search-result no-results">no matches</div>
-      </div>
-    {/if}
-  </div>
-{/if}
+<p class="ls-summary" aria-live="polite">
+  {summary}{activeTag ? ` in ${activeTag}` : ''}
+</p>
 
-<div class="ls-listing">
-  {#if searchMode === 'posts'}
-    {#each postSearchResults as post}
-      <div class="ls-row">
-        <span class="ls-date">{@html fmt(post.data.date)}</span>
-        <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>
-          {post.data.title}
-        </a>
-      </div>
-    {/each}
-  {:else}
-    {#each filtered as post}
-      <div class="ls-row">
-        <span class="ls-date">{@html fmt(post.data.date)}</span>
-        <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>
-          {post.data.title}
-        </a>
+{#if filtered.length > 0}
+  <div class="ls-listing">
+    {#each filtered as post (post.slug)}
+      <div class="ls-row" data-post-slug={post.slug}>
+        <span class="ls-date">
+          {formatPostDate(post.data.date, 'short')}<span class="ls-time">
+            , {formatPostDate(post.data.date, 'year')}
+          </span>
+        </span>
+        <a href={`/posts/${post.slug}/`} data-nav-item data-list-item>{post.data.title}</a>
         {#if post.data.categories.length > 0}
           <span class="post-tags">
-            {#each post.data.categories as cat}
-              <button class="tag" onclick={() => toggleTag(cat)}>{cat}</button>
+            {#each post.data.categories as category (category)}
+              <button
+                type="button"
+                class="tag"
+                data-tag={category}
+                aria-pressed={activeTag === category}
+                onclick={() => toggleTag(category)}
+              >
+                {category}
+              </button>
             {/each}
           </span>
         {/if}
       </div>
     {/each}
-  {/if}
-</div>
+  </div>
+{:else}
+  <p class="ls-empty">no matches</p>
+{/if}
 
 <style>
-  .tag-bar {
+  .sort-bar {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     flex-wrap: wrap;
   }
 
-  .tag-label {
+  .tag-count {
+    margin-left: 0.35em;
     color: var(--comment);
-    font-size: 0.85rem;
+    font-size: 0.9em;
   }
 
-  .tag {
-    display: inline-block;
-    font-size: 0.8rem;
-    padding: 0.05em 0.5em;
-    border: 1px solid var(--surface-2);
-    border-radius: 3px;
-    color: var(--cyan);
-    background: var(--surface-0);
-    cursor: pointer;
-    font-family: inherit;
+  .tag[aria-pressed='true'] .tag-count {
+    color: inherit;
+    opacity: 0.75;
   }
 
-  .tag:hover {
-    color: var(--bg);
-    background: var(--cyan);
-    border-color: var(--cyan);
-  }
-
-  .tag.active {
-    color: var(--bg);
-    background: var(--blue);
-    border-color: var(--blue);
-  }
-
-  .search-hints {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+  .ls-summary {
+    margin-bottom: 0.5rem;
     font-size: 0.75rem;
     color: var(--comment);
   }
 
-  .search-hints kbd {
-    background: var(--surface-1);
-    border: 1px solid var(--surface-2);
-    padding: 0.05em 0.4em;
-    border-radius: 3px;
-    font-family: inherit;
-    font-size: 0.85em;
-    color: var(--yellow);
-    margin: 0 0.1em;
-  }
-
-  .search-box {
-    margin-bottom: 1.25rem;
-    padding: 0.75rem 1rem;
-    background: var(--surface-0);
-    border: 1px solid var(--blue);
-    border-radius: 4px;
-  }
-
-  .search-box.tag-mode {
-    border-color: var(--green);
-  }
-
-  .search-prompt {
-    color: var(--green);
-    margin-right: 0.5rem;
-  }
-
-  .search-query {
-    color: var(--fg-bright);
-  }
-
-  .search-cursor {
-    color: var(--cyan);
-    animation: blink 1s step-end infinite;
-  }
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .search-results {
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .search-result {
-    padding: 0.1rem 0.5rem;
-    border-radius: 2px;
-    color: var(--fg);
-    font-size: 0.85rem;
-  }
-
-  .search-result.selected {
-    background: var(--surface-1);
-    color: var(--cyan);
-    outline: 1px solid var(--blue);
-    outline-offset: -1px;
-  }
-
-  .search-result.no-results {
+  .ls-empty {
+    padding: 0.15rem 0.5rem;
     color: var(--comment);
     font-style: italic;
-  }
-
-  .post-tags {
-    display: flex;
-    gap: 0.35rem;
-    flex-shrink: 0;
   }
 </style>
