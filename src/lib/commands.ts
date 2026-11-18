@@ -7,6 +7,7 @@ export type CommandContext = {
   navigate: (href: string) => void;
   openExternal: (href: string) => void;
   openPalette: (mode: 'search' | 'help') => void;
+  openShell: () => void;
 };
 
 export type Command = {
@@ -72,6 +73,13 @@ const NAVIGATION: readonly Command[] = [
 ];
 
 const ACTIONS: readonly Command[] = [
+  {
+    id: 'shell:open',
+    label: 'Open terminal',
+    group: 'actions',
+    keywords: ['shell', 'terminal'],
+    run: (context) => context.openShell(),
+  },
   {
     id: 'social:github',
     label: 'GitHub',

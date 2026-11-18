@@ -17,12 +17,16 @@ let lastKeyAt = 0;
 let paletteOpen = false;
 let opening = false;
 let mountedPaletteClose: (() => void) | null = null;
+let shellOpen = false;
+let openingShell = false;
+let mountedShellClose: (() => void) | null = null;
 
 const REGISTRY = new Map(buildCommands([]).map((command) => [command.id, command]));
 const CONTEXT: CommandContext = {
   navigate,
   openExternal,
   openPalette: (paletteMode) => void openPalette(paletteMode),
+  openShell: () => void openShell(),
 };
 
 export async function openPalette(paletteMode: PaletteMode = 'search'): Promise<void> {
@@ -80,6 +84,61 @@ export function closePalette(): void {
   mountedPaletteClose?.();
 }
 
+export async function openShell(): Promise<void> {
+  if (typeof document === 'undefined' || shellOpen || openingShell) return;
+
+  openingShell = true;
+  const restoreTo = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  let host: HTMLElement | null = null;
+
+  try {
+    const [{ mount, unmount }, { default: TerminalShell }] = await Promise.all([
+      import('svelte'),
+      import('../components/TerminalShell.svelte'),
+    ]);
+
+    host = document.createElement('div');
+    host.className = 'shell-host';
+    document.body.append(host);
+    const container = host;
+
+    let closed = false;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      unmount(app);
+      container.remove();
+      shellOpen = false;
+      mode = 'normal';
+      lastKey = null;
+      if (mountedShellClose === close) mountedShellClose = null;
+      if (restoreTo?.isConnected) restoreTo.focus();
+    };
+    const app = mount(TerminalShell, {
+      target: host,
+      props: {
+        mode: 'overlay',
+        onclose: close,
+      },
+    });
+
+    mountedShellClose = close;
+    shellOpen = true;
+    mode = 'modal';
+    lastKey = null;
+  } catch (error) {
+    host?.remove();
+    console.error('Unable to open the terminal shell', error);
+    mode = 'normal';
+  } finally {
+    openingShell = false;
+  }
+}
+
+export function closeShell(): void {
+  mountedShellClose?.();
+}
+
 function isTypingTarget(target: EventTarget | null): boolean {
   return target instanceof Element && target.closest(TYPING_SELECTOR) !== null;
 }
@@ -127,6 +186,9 @@ function execute(commandId: string): void {
       return;
     case 'palette:help':
       void openPalette('help');
+      return;
+    case 'shell:open':
+      void openShell();
       return;
     case 'list:enter':
       enterList(1);
@@ -213,6 +275,7 @@ function install(): void {
   document.addEventListener('click', handleClick);
   document.addEventListener('astro:before-swap', () => {
     closePalette();
+    closeShell();
     mode = 'normal';
     lastKey = null;
   });

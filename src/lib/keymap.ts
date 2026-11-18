@@ -15,6 +15,7 @@ export const KEYMAP: Record<KeyMode, readonly KeyBinding[]> = {
   normal: [
     { keys: ['/'], command: 'palette:search', label: 'Search commands', group: 'overlay' },
     { keys: ['?'], command: 'palette:help', label: 'Show keyboard shortcuts', group: 'overlay' },
+    { keys: [':'], command: 'shell:open', label: 'Open terminal', group: 'overlay' },
     { keys: ['j'], command: 'list:enter', label: 'Enter list navigation', group: 'list' },
     { keys: ['k'], command: 'list:enter-last', label: 'Enter list navigation', group: 'list' },
     { keys: ['H'], command: 'nav:back', label: 'Go back', group: 'navigation' },
