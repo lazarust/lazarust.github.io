@@ -17,13 +17,14 @@ const { Content } = await render(post);
 ---
 
 <BaseLayout title={post.data.title}>
-  <nav class="nav-links">
+  <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
       &larr; home
     </a>{' '}
     <a href="/blog/" data-nav-item>
       &larr; blog
     </a>
+    <span aria-current="page">{post.data.title}</span>
   </nav>
   <div class="prompt-line">
     <span class="prompt-user">~/blog</span>
