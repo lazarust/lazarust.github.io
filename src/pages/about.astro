@@ -10,7 +10,10 @@ if (!about) {
 const { Content } = await render(about);
 ---
 
-<BaseLayout title={about.data.title}>
+<BaseLayout
+  title={about.data.title}
+  description="I'm a data Practitioner with 6+ years building production-grade data systems and ML-powered tooling."
+>
   <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
       &larr; home

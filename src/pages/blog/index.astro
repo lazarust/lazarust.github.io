@@ -8,7 +8,10 @@ const sorted = [...posts].sort(byDateDesc);
 const postData = sorted.map(serializePost);
 ---
 
-<BaseLayout title="~/blog">
+<BaseLayout
+  title="~/blog"
+  description="An archive of posts about tools, data engineering, and personal projects."
+>
   <h1 class="sr-only">Blog</h1>
   <nav class="nav-links" aria-label="Breadcrumb">
     <a href="/" data-nav-item>
