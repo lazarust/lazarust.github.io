@@ -26,7 +26,6 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
     <meta property="og:description" content="Personal blog about data engineering, ML, and tools" />
     <meta property="og:url" content={Astro.url} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="astro-view-transitions" content="enable" />
   </head>
   <body>
     <div class="app-shell">
@@ -35,13 +34,25 @@ const siteTitle = title ? `${title} — Thomas' Blog` : "Thomas' Blog";
       </main>
       <footer class="site-footer">
         <div class="footer-links">
-          <a href="https://github.com/lazarust" target="_blank" rel="noopener">github</a>
-          <a href="https://bsky.app/profile/lazarust.bsky.social" target="_blank" rel="noopener">bluesky</a>
-          <a href="https://twitter.com/lazarustda" target="_blank" rel="noopener">x</a>
-          <a href="https://www.linkedin.com/in/td-lazarus" target="_blank" rel="noopener">linkedin</a>
-          <a href="/rss.xml" target="_blank" rel="noopener">rss</a>
+          <a href="https://github.com/lazarust" target="_blank" rel="noopener">
+            github
+          </a>
+          <a href="https://bsky.app/profile/lazarust.bsky.social" target="_blank" rel="noopener">
+            bluesky
+          </a>
+          <a href="https://twitter.com/lazarustda" target="_blank" rel="noopener">
+            x
+          </a>
+          <a href="https://www.linkedin.com/in/td-lazarus" target="_blank" rel="noopener">
+            linkedin
+          </a>
+          <a href="/rss.xml" target="_blank" rel="noopener">
+            rss
+          </a>
         </div>
-        <p class="footer-hint">press <kbd>?</kbd> for keyboard shortcuts</p>
+        <p class="footer-hint">
+          press <kbd>?</kbd> for keyboard shortcuts
+        </p>
       </footer>
       <KeyboardNav client:load />
     </div>

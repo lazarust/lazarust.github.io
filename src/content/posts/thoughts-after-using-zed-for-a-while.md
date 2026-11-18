@@ -1,17 +1,14 @@
 ---
 title: "Thoughts After Using Zed For A While"
+description: "What I like about Zed — speed, open source, Vim motions, and easy LLM switching — plus missing Pytest and Docker remote support."
 draft: false
-date: 2024-10-08
+date: "2024-10-08"
 categories:
   - zed
   - ollama
 ---
 
-# Thoughts After Using Zed For A While
-
 For those who haven't heard of [Zed](https://www.Zed.dev): Zed is a lightweight code editor that, from their homepage, "designed for high-performance collaboration with humans and AI". I originally heard about Zed via [ThePrimeagen's](https://www.youtube.com/@ThePrimeagen) interview with Thorsten Ball, who is a engineer working for and on Zed. [Link to the interview](https://www.youtube.com/watch?v=8XweSqTYdMQ).
-
-<!-- more -->
 
 ## What drew me to Zed
 

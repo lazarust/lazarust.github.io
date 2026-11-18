@@ -10,8 +10,12 @@ if (!about) {
 const { Content } = await render(about);
 ---
 
-<BaseLayout title="About">
-  <nav class="nav-links"><a href="/" data-nav-item>&larr; home</a></nav>
+<BaseLayout title={about.data.title}>
+  <nav class="nav-links">
+    <a href="/" data-nav-item>
+      &larr; home
+    </a>
+  </nav>
   <div class="prompt-line">
     <span class="prompt-user">~</span>
     <span class="prompt-sep">$</span>

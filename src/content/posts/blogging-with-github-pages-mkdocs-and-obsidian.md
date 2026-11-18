@@ -1,22 +1,19 @@
 ---
 title: "Blogging with Github Pages, MkDocs, and Obsidian"
+description: "How I set up this blog with Obsidian as the editor, MkDocs Material for the site, and a GitHub Action that deploys to GitHub Pages."
 draft: false
-date: 2024-05-17
+date: "2024-05-17"
 categories:
   - blogging
   - obsidian
   - mkdocs
 ---
 
-# Blogging with Github Pages, MkDocs, and Obsidian
-
 I feel like a lot of tech people have tried blogging. Personally, I've tried a couple times now across multiple different services (Substack, Medium, etc.) and nothing has really stuck for longer than a couple weeks. For me the main problem was it took a lot of effort to open the site and deal with their, not quite markdown, document editor.
 
 After finding and falling in love with [Obsidian](https://obsidian.md/)for keeping track of personal notes and thoughts, I figured it would be fairly simple to also use it for blogging with just a simple Github action and using [MkDocs](https://www.mkdocs.org/).
 
 I figured this would be a good first blog post since it's something other's could benefit from and it was all still fresh in my mind!
-
-<!-- more -->
 
 ## Setting up the Github Repository
 
@@ -129,7 +126,7 @@ The Github action to automatically deploy blog posts is pretty simple and really
    - This pushes the generated html files onto the `gh-pages` branch.
    - I prefer to use `--force` so it overwrites any previous releases.
 
-# Conclusion
+## Conclusion
 
 Now it's time to get blogging! One thing I really like about this setup is that it takes very little thought to create a post and publish it. It's as easy as opening Obsidian, typing some thoughts in markdown, and having Obsidian Git automatically (or manually) push the changes to Github.
 

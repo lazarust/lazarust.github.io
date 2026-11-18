@@ -1,17 +1,14 @@
 ---
 title: "Reducing the Cognitive Load with TODOs"
+description: "Why I write tasks down in Apple Reminders and TODO comments instead of holding them in my head, and how LLMs work better with them."
 draft: false
-date: 2025-05-13
+date: "2025-05-13"
 categories:
   - productivity
   - todo-list
 ---
 
-# Reducing the Cognitive Load with TODOs
-
 I've recently found myself working on some bigger projects requiring large code refactors. For personal household tasks I've been using the Apple Reminders app to keep track of what needs done when (even writing this blog post had to become a reminder for it to actually get done 😂).
-
-<!-- more -->
 
 A big reason I like using a reminders list to keep track of things, is that it lets me have the following workflow:
 

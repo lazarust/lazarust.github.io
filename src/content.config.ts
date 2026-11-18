@@ -2,14 +2,24 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+export const POST_CATEGORIES = [
+  'blogging',
+  'obsidian',
+  'mkdocs',
+  'zed',
+  'ollama',
+  'productivity',
+  'todo-list',
+] as const;
+
 const posts = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/posts' }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/posts' }),
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(),
+    description: z.string().min(20).max(160),
     draft: z.boolean().optional().default(false),
-    date: z.coerce.date(),
-    categories: z.array(z.string()).optional(),
+    date: z.iso.date(),
+    categories: z.array(z.enum(POST_CATEGORIES)).default([]),
   }),
 });
 
